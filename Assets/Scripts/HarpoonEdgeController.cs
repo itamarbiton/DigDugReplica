@@ -4,25 +4,26 @@ using UnityEngine;
 
 public class HarpoonEdgeController : MonoBehaviour
 {
-    private BoxCollider2D collider;
+    private BoxCollider2D innerCollider;
 
     private void Start()
     {
-        collider = GetComponent<BoxCollider2D>();
+        innerCollider = GetComponent<BoxCollider2D>();
     }
 
     public void EnableHarpoon()
     {
-        collider.enabled = true;
+        innerCollider.enabled = true;
     }
 
     public void DisableHarpoon()
     {
-        collider.enabled = false;
+        innerCollider.enabled = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log("[TEST]: harpoon edge collided: " + collision);
         EventManager.HarpoonHit(collision.gameObject);
     }
 

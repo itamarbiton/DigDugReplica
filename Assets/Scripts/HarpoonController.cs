@@ -101,14 +101,20 @@ public class HarpoonController : MonoBehaviour
 
     private void OnHarpoonHit(GameObject hitObject)
     {
-        harpoonAnimator.speed = 0;
-
-        attachedObject = hitObject;
+        EnemyController enemyController = hitObject.GetComponent<EnemyController>();
+        if (enemyController != null)
+        {
+            harpoonAnimator.speed = 0;
+            attachedObject = hitObject;
+        }
     }
 
     private void OnHarpoonDetached()
     {
-        harpoonAnimator.speed = 1;
+        if (attachedObject != null && attachedObject.GetComponent<EnemyController>() != null)
+        {
+            harpoonAnimator.speed = 1;
+        }
     }
 
     private void SubscribeEvents()

@@ -19,10 +19,14 @@ public class PlayerController : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
     private Vector2 facingDir;
+    private Animator animator;
+
+    private bool isDead = false;
 
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
 
         harpoon = transform.Find("Weapon").gameObject;
         if (harpoon == null)
@@ -33,6 +37,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (isDead) return;
+
         float hInput = Input.GetAxisRaw("Horizontal");
         float vInput = Input.GetAxisRaw("Vertical");
 
@@ -201,5 +207,20 @@ public class PlayerController : MonoBehaviour
     {
         levelGenerator.Dig(position);
         lastPosition = position;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.GetComponent<EnemyController>() is EnemyController enemyController)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        harpoon.SetActive(false);
+        isDead = true;
+        animator.SetTrigger("Die");
     }
 }

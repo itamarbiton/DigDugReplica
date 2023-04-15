@@ -37,10 +37,7 @@ public class EnemyController : MonoBehaviour, IInflatable
 
         List<Vector3> closePositions = FilterPointsByDistance(transform.position, dugPositions, walkDistanceThreshold);
 
-        if (closePositions.Count == 0)
-        {
-            return;
-        }
+        if (closePositions.Count == 0) return;
 
         Vector3 refPosition = Vector3.positiveInfinity;
         if (lastPositions.Count > 1)
@@ -78,7 +75,7 @@ public class EnemyController : MonoBehaviour, IInflatable
         {
             float distance = Vector3.Distance(position, point);
 
-            if (distance < closestDistance && !point.Equals(prevPos))
+            if (distance < closestDistance)
             {
                 closestDistance = distance;
                 closestPoint = point;
@@ -90,8 +87,9 @@ public class EnemyController : MonoBehaviour, IInflatable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("[TEST]: enemy hit something!");
-        HarpoonEdgeController edgeController = collision.gameObject.GetComponent<HarpoonEdgeController>();
+        Debug.Log("[TEST]: enemy hit something!" + collision);
+        HarpoonEdgeController edgeController = collision.GetComponent<HarpoonEdgeController>();
+        Debug.Log("[TEST]: edge controller: " + edgeController);
         if (edgeController != null)
         {
             animator.speed = 0;
