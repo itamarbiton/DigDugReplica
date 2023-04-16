@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour, IInflatable
 {
+    [HideInInspector] public LevelGenerator levelGenerator;
+
     public bool IsDead
     {
         get { return hp <= 0; }
@@ -19,6 +21,8 @@ public class EnemyController : MonoBehaviour, IInflatable
     private SpriteRenderer spriteRenderer;
     private bool isBeingInflated = false;
 
+    private bool isWalking = false;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -31,24 +35,69 @@ public class EnemyController : MonoBehaviour, IInflatable
 
     }
 
+
+
     public void MoveTowardsPosition(Vector3 targetPosition, List<Vector3> dugPositions)
     {
         if (isBeingInflated) return;
 
+        if (isWalking) return;
+
         List<Vector3> closePositions = FilterPointsByDistance(transform.position, dugPositions, walkDistanceThreshold);
 
-        if (closePositions.Count == 0) return;
 
-        Vector3 refPosition = Vector3.positiveInfinity;
-        if (lastPositions.Count > 1)
-            refPosition = lastPositions.Dequeue();
+        if (closePositions.Count == 0)
+        {
+            Debug.Log("no close points");
+            return;
+        }
 
-        Vector3 targetPoint = GetClosestPoint(closePositions, targetPosition, refPosition);
+        Vector3 targetPoint = GetClosestPoint(closePositions, targetPosition, transform.position);
+
         lastPositions.Enqueue(targetPoint);
 
-        Vector3 currentPos = transform.position;
+        StartCoroutine(WalkToPoint(targetPoint, .1f));
 
-        transform.position = currentPos + (targetPoint - transform.position).normalized * speed * Time.deltaTime;
+        return;
+
+        Vector3 direction = (targetPoint - transform.position).normalized;
+        float hInput = direction.x;
+        float vInput = direction.y;
+
+        Debug.DrawRay(transform.position, direction * 3);
+
+        if (hInput != 0)
+        {
+            if (!MovementUtilities.CanPlayerMoveX(levelGenerator.gridPositions, transform.position, .1f))
+            {
+                float closestY = MovementUtilities.GetClosestY(transform.position, levelGenerator.gridPositions, .1f);
+
+                hInput = 0;
+                vInput = (closestY > 0) ? 1 : -1;
+            }
+        }
+
+        if (vInput != 0)
+        {
+            var canMoveY = MovementUtilities.CanPlayerMoveY(levelGenerator.gridPositions, transform.position, .1f);
+            if (!canMoveY)
+            {
+                float closestX = MovementUtilities.GetClosestX(transform.position, levelGenerator.gridPositions, .1f);
+
+                vInput = 0;
+                hInput = (closestX > 0) ? 1 : -1;
+            }
+        }
+
+        Debug.DrawRay(transform.position, new Vector3(hInput, vInput) * 2, Color.cyan);
+
+        Vector3 positionDelta = new Vector3(hInput * speed * Time.deltaTime, vInput * speed * Time.deltaTime, 0f);
+        Vector3 currentPos = transform.position;
+        Vector3 newPosition = currentPos + positionDelta;
+        Vector3 clampedNewPosition = levelGenerator.ClampPositionToBounds(newPosition);
+
+        // transform.position = clampedNewPosition;
+        transform.position += direction * speed * Time.deltaTime;
     }
 
     public List<Vector3> FilterPointsByDistance(Vector3 position, List<Vector3> points, float threshold)
@@ -66,18 +115,21 @@ public class EnemyController : MonoBehaviour, IInflatable
         return filteredPoints;
     }
 
-    public Vector3 GetClosestPoint(List<Vector3> points, Vector3 position, Vector3 prevPos)
+    public Vector3 GetClosestPoint(List<Vector3> points, Vector3 targetPos, Vector3 currentPos)
     {
+        // initialize closest point and distance
         Vector3 closestPoint = points[0];
-        float closestDistance = Vector3.Distance(position, closestPoint);
+        float closestDistance = Vector3.Distance(targetPos, closestPoint);
 
+        // check if there's something better
         foreach (Vector3 point in points)
         {
-            float distance = Vector3.Distance(position, point);
+            float targetDistance = Vector3.Distance(targetPos, point);
+            float selfDistance = Vector3.Distance(currentPos, point);
 
-            if (distance < closestDistance)
+            if (targetDistance < closestDistance && selfDistance > .15f)
             {
-                closestDistance = distance;
+                closestDistance = targetDistance;
                 closestPoint = point;
             }
         }
@@ -87,9 +139,7 @@ public class EnemyController : MonoBehaviour, IInflatable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("[TEST]: enemy hit something!" + collision);
         HarpoonEdgeController edgeController = collision.GetComponent<HarpoonEdgeController>();
-        Debug.Log("[TEST]: edge controller: " + edgeController);
         if (edgeController != null)
         {
             animator.speed = 0;
@@ -118,5 +168,19 @@ public class EnemyController : MonoBehaviour, IInflatable
     public void StopInflating()
     {
         hp = inflationSprites.Count;
+    }
+
+    private IEnumerator WalkToPoint(Vector3 point, float distanceThreshold)
+    {
+        isWalking = true;
+
+        while (Vector3.Distance(transform.position, point) > distanceThreshold)
+        {
+            Vector3 dir = (point - transform.position).normalized;
+            transform.position += dir * speed * Time.deltaTime;
+            yield return null;
+        }
+
+        isWalking = false;
     }
 }

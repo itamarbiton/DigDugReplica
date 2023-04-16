@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 90696897}
   - component: {fileID: 90696898}
   - component: {fileID: 90696899}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Weapon Edge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -523,7 +523,7 @@ GameObject:
   - component: {fileID: 1372138328}
   - component: {fileID: 1372138332}
   - component: {fileID: 1372138331}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -563,7 +563,6 @@ MonoBehaviour:
   harpoon: {fileID: 0}
   speed: 4
   dugTileThreshold: 0.2
-  gridSpacing: 0
   turnDistance: 2
   lastPosition: {x: 0, y: 0, z: 0}
 --- !u!95 &1372138329
@@ -832,3 +831,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detachDuration: 1
+  levelGenerator: {fileID: 986312073}
+  radius: 0.3

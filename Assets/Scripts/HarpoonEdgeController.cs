@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HarpoonEdgeController : MonoBehaviour
 {
-    private BoxCollider2D innerCollider;
+    public BoxCollider2D innerCollider { get; private set; }
 
     private void Start()
     {

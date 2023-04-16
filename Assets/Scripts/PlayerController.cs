@@ -11,8 +11,6 @@ public class PlayerController : MonoBehaviour
     public float speed = 1f;
     public float dugTileThreshold = .33f;
 
-    public Vector3[,] gridPositions;
-    public float gridSpacing;
     public float turnDistance = 2f;
 
     public Vector3 lastPosition;
@@ -48,53 +46,21 @@ public class PlayerController : MonoBehaviour
             OrientPlayer(facingDir);
         }
 
-        if (gridPositions != null && gridSpacing > 0)
+        if (levelGenerator.gridPositions != null && levelGenerator.spacing > 0)
         {
-            MovePlayerOnGrid(gridPositions, hInput, vInput);
+            MovePlayerOnGrid(levelGenerator.gridPositions, hInput, vInput);
             SpawnDugTileIfNeeded();
         }
-    }
-
-    bool CanPlayerMoveX(float threshold)
-    {
-        for (int i = 0; i < gridPositions.GetLength(0); i++)
-        {
-            var position = gridPositions[i, 0];
-            var distance = Mathf.Abs(transform.position.y - position.y);
-
-            if (distance < threshold)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    bool CanPlayerMoveY(float threshold)
-    {
-        for (int i = 0; i < gridPositions.GetLength(1); i++)
-        {
-            var position = gridPositions[0, i];
-            var distance = Mathf.Abs(transform.position.x - position.x);
-
-            if (distance < threshold)
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public void MovePlayerOnGrid(Vector3[,] gridPositions, float hInput, float vInput)
     {
         if (hInput != 0)
         {
-            var canMoveX = CanPlayerMoveX(.1f);
+            var canMoveX = MovementUtilities.CanPlayerMoveX(gridPositions, transform.position, .1f);
             if (!canMoveX)
             {
-                var closestY = GetClosestY(transform.position, gridPositions, .1f);
+                var closestY = MovementUtilities.GetClosestY(transform.position, gridPositions, .1f);
 
                 hInput = 0;
                 vInput = (closestY > 0) ? 1 : -1;
@@ -103,10 +69,10 @@ public class PlayerController : MonoBehaviour
 
         if (vInput != 0)
         {
-            var canMoveY = CanPlayerMoveY(.1f);
+            var canMoveY = MovementUtilities.CanPlayerMoveY(gridPositions, transform.position, .1f);
             if (!canMoveY)
             {
-                var closestX = GetClosestX(transform.position, gridPositions, .1f);
+                var closestX = MovementUtilities.GetClosestX(transform.position, gridPositions, .1f);
 
                 vInput = 0;
                 hInput = (closestX > 0) ? 1 : -1;
@@ -133,59 +99,7 @@ public class PlayerController : MonoBehaviour
         spriteRenderer.flipY = facingDirection.x < 0;
     }
 
-    public float GetClosestX(Vector3 position, Vector3[,] gridPositions, float threshold)
-    {
-        float closestX = 0f;
-        float closestDistance = Mathf.Infinity;
 
-        for (int j = 0; j < gridPositions.GetLength(1); j++)
-        {
-            Vector3 gridPosition = gridPositions[0, j];
-
-            // ignore points below the threshold distance
-            if (Vector3.Distance(position, gridPosition) < threshold)
-            {
-                continue;
-            }
-
-            float distance = Mathf.Abs(gridPosition.x - position.x);
-
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestX = gridPosition.x;
-            }
-        }
-
-        return closestX;
-    }
-
-    public float GetClosestY(Vector3 position, Vector3[,] gridPositions, float threshold)
-    {
-        float closestY = 0f;
-        float closestDistance = Mathf.Infinity;
-
-        for (int i = 0; i < gridPositions.GetLength(0); i++)
-        {
-            Vector3 gridPosition = gridPositions[i, 0];
-
-            // ignore points below the threshold distance
-            if (Vector3.Distance(position, gridPosition) < threshold)
-            {
-                continue;
-            }
-
-            float distance = Mathf.Abs(gridPosition.y - position.y);
-
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestY = gridPosition.y;
-            }
-        }
-
-        return closestY;
-    }
 
     public void SpawnDugTileIfNeeded()
     {

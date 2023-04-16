@@ -9,14 +9,15 @@ public class LevelGenerator : MonoBehaviour
     public GameObject dugTile;
     public PlayerController playerController;
 
+    public Vector3[,] gridPositions { get; private set; }
+    public float spacing { get; private set; } = .5f;
+    public List<Vector3> dugTilePositions { get; private set; } = new List<Vector3>();
+
     private bool showDebugMarkers = false;
 
     private int rowCount = 20;
     private int colCount = 11;
-    private float spacing = .5f;
 
-    private Vector3[,] gridPositions;
-    private List<Vector3> dugTilePositions = new List<Vector3>();
     private List<EnemyController> enemeis = new List<EnemyController>();
     private Transform dugTilesContainer;
 
@@ -26,8 +27,6 @@ public class LevelGenerator : MonoBehaviour
     void Start()
     {
         dugTilesContainer = new GameObject("Dug Tiles Container").transform;
-
-        playerController.gridSpacing = spacing;
 
         InitGrid();
         PopulateEnemies();
@@ -138,7 +137,6 @@ public class LevelGenerator : MonoBehaviour
 
         bounds = GetGridBounds(gridPositions);
 
-        playerController.gridPositions = gridPositions;
         playerController.transform.position = gridPositions[rowCount - 3, 0];
     }
 
@@ -149,6 +147,7 @@ public class LevelGenerator : MonoBehaviour
         PreDigLine(dugTile, preDigPointA, preDigPointB, .33f);
 
         var enemy = Instantiate(enemyPrefab, preDigPointA, Quaternion.identity);
+        enemy.levelGenerator = this;
         enemeis.Add(enemy);
     }
 

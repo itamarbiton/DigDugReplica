@@ -5,6 +5,9 @@ using UnityEngine;
 public class HarpoonController : MonoBehaviour
 {
     [SerializeField] private float detachDuration = 1f;
+    [SerializeField] private LevelGenerator levelGenerator;
+    [SerializeField] private float radius = .3f;
+
     private float detachTimer = -1f;
 
     private HarpoonEdgeController edgeController;
@@ -33,13 +36,40 @@ public class HarpoonController : MonoBehaviour
     {
         HandleInput();
         HandleDetach();
+
+        List<Vector3> dugPositions = levelGenerator.dugTilePositions;
+        Vector3 edgePos = edgeController.transform.position;
+
+        bool validPos = dugPositions.Exists(point =>
+        {
+            float distance = Vector3.Distance(point, edgePos);
+
+            Debug.DrawRay(edgePos, (point - edgePos).normalized * radius);
+
+            if (distance <= radius)
+            {
+                return true;
+            }
+
+            return false;
+        });
+
+        if (!validPos)
+        {
+            Debug.Log("[TEST]: failed to find point!");
+            WithdrawHarpoon();
+        }
     }
 
     private void WithdrawHarpoon()
     {
+        if (!edgeController.innerCollider.enabled) return;
+
         edgeController.DisableHarpoon();
 
         harpoonAnimator.SetTrigger("WithdrawHarpoon");
+
+        Debug.Log("[TEST]: harpoon withdrawn");
 
         if (attachedObject != null && attachedObject.GetComponent<EnemyController>() is IInflatable inflatable)
         {
@@ -56,11 +86,13 @@ public class HarpoonController : MonoBehaviour
         {
             if (!isAttached)
             {
+                Debug.Log("[TEST]: not attached!");
                 edgeController.EnableHarpoon();
                 harpoonAnimator.SetTrigger("ShootHarpoon");
             }
             else if (attachedObject != null)
             {
+                Debug.Log("[TEST]: attached!");
                 AttemptInflation(attachedObject);
             }
             else
