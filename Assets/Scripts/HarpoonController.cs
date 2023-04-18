@@ -44,8 +44,6 @@ public class HarpoonController : MonoBehaviour
         {
             float distance = Vector3.Distance(point, edgePos);
 
-            Debug.DrawRay(edgePos, (point - edgePos).normalized * radius);
-
             if (distance <= radius)
             {
                 return true;

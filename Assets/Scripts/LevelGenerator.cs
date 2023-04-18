@@ -145,6 +145,14 @@ public class LevelGenerator : MonoBehaviour
         var preDigPointA = gridPositions[3, 2];
         var preDigPointB = gridPositions[3, 6];
         PreDigLine(dugTile, preDigPointA, preDigPointB, .33f);
+        
+        var preDigPointC = gridPositions[5, 1];
+        var preDigPointD = gridPositions[12, 1];
+        PreDigLine(dugTile, preDigPointC, preDigPointD, .33f);
+        
+        var preDigPointE = gridPositions[7, 5];
+        var preDigPointF = gridPositions[15, 5];
+        PreDigLine(dugTile, preDigPointE, preDigPointF, .33f);
 
         var enemy = Instantiate(enemyPrefab, preDigPointA, Quaternion.identity);
         enemy.levelGenerator = this;
