@@ -1,18 +1,42 @@
+using System;
 using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Grid3DPlayerController : MonoBehaviour
 {
     public bool IsWalking { get; private set; }
+    public bool IsAlive { get; private set; } = true;
     public Vector3[,] GridData;
 
+    [SerializeField] private AnimationCurve curve;
     [SerializeField] private float speed = 3f;
+    [SerializeField] private GameObject explosionPrefab;
 
     private Vector3 direction = Vector3.right;
     private Vector2 gridPosition = new(0, 0);
 
+    private Quaternion targetRotation = Quaternion.LookRotation(Vector3.right, Vector3.up);
+    private Quaternion lastCurrentRotation = Quaternion.LookRotation(Vector3.right, Vector3.up);
+
+    private float rotationDuration = .12f;
+    private float rotationTime;
+
+    private void FixedUpdate()
+    {
+        if (rotationTime <= rotationDuration)
+        {
+            float t = curve.Evaluate(rotationTime / rotationDuration);
+            transform.rotation = Quaternion.Slerp(lastCurrentRotation, targetRotation, t);
+            rotationTime += Time.fixedDeltaTime;
+        }
+        
+    }
+
     public void HandleInput()
     {
+        if (!IsAlive) return;
+        
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             direction = Vector3.back;
@@ -36,6 +60,8 @@ public class Grid3DPlayerController : MonoBehaviour
 
     public void HandleMovement()
     {
+        if (!IsAlive) return;
+
         if (GridData == null || GridData.Length == 0) return;
 
         if (IsWalking) return;
@@ -61,9 +87,13 @@ public class Grid3DPlayerController : MonoBehaviour
     private IEnumerator WalkCoroutine(Vector2 gridDest)
     {
         var position = transform.position;
-        
+
         Vector3 dest = GridData[(int)gridDest.x, (int)gridDest.y];
         dest.y = position.y;
+
+        targetRotation = Quaternion.LookRotation((dest - position).normalized, Vector3.up);
+        lastCurrentRotation = transform.rotation;
+        rotationTime = 0f;
         
         IsWalking = true;
         
@@ -77,9 +107,20 @@ public class Grid3DPlayerController : MonoBehaviour
         }
 
         gridPosition = gridDest;
-        
-        Debug.Log("updated grid position: " + gridPosition);
 
         IsWalking = false;
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        var moleController = other.gameObject.GetComponentInParent<MoleController>();
+        if (moleController != null)
+        {
+            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+            CinemachineShake.Instance.ShakeCamera(5f, 1f);
+
+            IsAlive = false;
+            Destroy(gameObject);
+        }
     }
 }

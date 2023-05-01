@@ -39,16 +39,9 @@ public class GridPlayerController : MonoBehaviour
         if (GridData == null || GridData.Length == 0) return;
         
         if (IsWalking) return;
-        
-        Debug.Log("direction: " + direction);
-        Debug.Log("grid position: " + gridPosition);
 
         Vector2 targetGridPosition = new Vector2(gridPosition.x + direction.y, gridPosition.y + direction.x);
-        
-        Debug.Log("target grid position: " + targetGridPosition);
-        
-        Debug.Log("grid data: " + GridData.Length);
-        
+
         if (targetGridPosition.x >= GridData.GetLength(0) || targetGridPosition.x < 0)
             return;
 
