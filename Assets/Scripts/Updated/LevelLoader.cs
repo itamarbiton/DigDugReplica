@@ -15,6 +15,15 @@ public class LevelLoader : MonoBehaviour
     private void Start()
     {
         currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+        LoseScreenController.PlayerDidRestart += OnPlayerDidRestart;
+        WinScreenController.PlayerDidWinRestart += OnPlayerDidRestart;
+    }
+
+    private void OnDestroy()
+    {
+        LoseScreenController.PlayerDidRestart -= OnPlayerDidRestart;
+        WinScreenController.PlayerDidWinRestart -= OnPlayerDidRestart;
     }
 
     void Update()
@@ -23,13 +32,9 @@ public class LevelLoader : MonoBehaviour
         {
             LoadNextLevel();
         }
-        else if (currentSceneIndex == 1 && Input.GetKeyDown(KeyCode.R))
-        {
-            StartCoroutine(LoadLevel(currentSceneIndex));
-        }
     }
 
-    private void LoadNextLevel()
+    public void LoadNextLevel()
     {
         StartCoroutine(LoadLevel(SceneManager.GetActiveScene().buildIndex + 1));
     }
@@ -41,5 +46,10 @@ public class LevelLoader : MonoBehaviour
         yield return new WaitForSeconds(transitionTime);
 
         SceneManager.LoadScene(levelIndex);
+    }
+
+    private void OnPlayerDidRestart()
+    {
+        StartCoroutine(LoadLevel(currentSceneIndex));
     }
 }

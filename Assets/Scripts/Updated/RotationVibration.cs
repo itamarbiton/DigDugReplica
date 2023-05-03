@@ -24,6 +24,6 @@ public class RotationVibration : MonoBehaviour
     {
         float noise = (Mathf.PerlinNoise(Time.time * speed + noiseOffset, 0) * 2 - 1) * amplitude;
         float currentRotationZ = initialRotationZ + noise;
-        transform.localRotation = Quaternion.Euler(0, 0, currentRotationZ);
+        transform.localRotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.localRotation.eulerAngles.y, currentRotationZ);
     }
 }

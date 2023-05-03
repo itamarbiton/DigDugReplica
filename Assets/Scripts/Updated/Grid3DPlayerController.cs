@@ -2,13 +2,19 @@ using System;
 using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Grid3DPlayerController : MonoBehaviour
 {
+    public static event Action PlayerDidDie;
+    
     public bool IsWalking { get; private set; }
     public bool IsAlive { get; private set; } = true;
     public Vector3[,] GridData;
 
+    [FormerlySerializedAs("smokeParticlesystem")] [SerializeField] private ParticleSystem smokeParticleSystem;
+    [SerializeField] private AudioClip grassPopAudioClip;
+    [SerializeField] private AudioClip explosionAudioClip;
     [SerializeField] private AnimationCurve curve;
     [SerializeField] private float speed = 3f;
     [SerializeField] private GameObject explosionPrefab;
@@ -21,6 +27,51 @@ public class Grid3DPlayerController : MonoBehaviour
 
     private float rotationDuration = .12f;
     private float rotationTime;
+
+    private AudioSource audioSource;
+    private float audioPitch = 1f;
+    private float grassPopCooldown;
+    private bool shouldSmoke;
+    private bool didWin;
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+
+        GridGenerator3D.AllGrassBladesCut += OnAllGrassBladesCut;
+    }
+
+    private void OnAllGrassBladesCut()
+    {
+        didWin = true;
+    }
+
+    private void OnDestroy()
+    {
+        GridGenerator3D.AllGrassBladesCut -= OnAllGrassBladesCut;
+    }
+
+    private void Update()
+    {
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        {
+            smokeParticleSystem.Play();
+        }
+
+        if (grassPopCooldown > 0)
+        {
+            grassPopCooldown -= Time.deltaTime;
+            grassPopCooldown = Mathf.Max(0, grassPopCooldown);
+        }
+        
+        if (audioPitch >= 1f)
+        {
+            audioPitch -= 1f * Time.deltaTime;
+            audioPitch = Mathf.Max(1f, audioPitch);
+        }
+
+        audioSource.pitch = audioPitch;
+    }
 
     private void FixedUpdate()
     {
@@ -36,23 +87,25 @@ public class Grid3DPlayerController : MonoBehaviour
     public void HandleInput()
     {
         if (!IsAlive) return;
+
+        SwipeDirection swipeDirection = SwipeDetector.Instance.GetLastSwipeData().Direction;
         
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKeyDown(KeyCode.DownArrow) || swipeDirection == SwipeDirection.Down)
         {
             direction = Vector3.back;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || swipeDirection == SwipeDirection.Left)
         {
             direction = Vector3.left;
         }
 
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.RightArrow) || swipeDirection == SwipeDirection.Right)
         {
             direction = Vector3.right;
         }
 
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.UpArrow) || swipeDirection == SwipeDirection.Up)
         {
             direction = Vector3.forward;
         }
@@ -114,13 +167,29 @@ public class Grid3DPlayerController : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         var moleController = other.gameObject.GetComponentInParent<MoleController>();
-        if (moleController != null)
+        if (!didWin && moleController != null)
         {
             Instantiate(explosionPrefab, transform.position, Quaternion.identity);
             CinemachineShake.Instance.ShakeCamera(5f, 1f);
 
+            GameObject explosionSource = new GameObject("Explosion Source");
+            AudioSource explosionAudioSource = explosionSource.AddComponent<AudioSource>();
+            explosionAudioSource.PlayOneShot(explosionAudioClip);
+            Destroy(explosionSource, 10f);
+
             IsAlive = false;
             Destroy(gameObject);
+            
+            PlayerDidDie?.Invoke();
+        }
+        else if (other.gameObject.CompareTag("GrassBlade"))
+        {
+            audioPitch += .01f;
+            if (grassPopCooldown <= 0)
+            {
+                grassPopCooldown = .05f;
+                audioSource.Play();
+            }
         }
     }
 }

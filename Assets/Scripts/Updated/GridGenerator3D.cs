@@ -1,18 +1,25 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cinemachine;
+using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class GridGenerator3D : MonoBehaviour
 {
+    public static event Action AllGrassBladesCut;
+
+    [SerializeField] private ParticleSystem confettiParticleSystem;
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject enemy1Prefab;
+    [SerializeField] private GameObject explosionPrefab;
     [SerializeField] private float enemy1Percent = .2f;
     [SerializeField] private List<GameObject> gridPrefabs;
     [SerializeField] private int rows;
     [SerializeField] private int columns;
     [SerializeField] private float spacing;
+    [SerializeField] private CinemachineVirtualCamera camera;
 
     public Vector3[,] gridData { get; private set; }
 
@@ -20,6 +27,7 @@ public class GridGenerator3D : MonoBehaviour
     private List<GameObject> enemies;
 
     private bool isGameRunning = false;
+    private int grassBladesCount;
 
     private void Start()
     {
@@ -33,11 +41,15 @@ public class GridGenerator3D : MonoBehaviour
         player.GridData = gridData;
 
         InstructionsController.InstructionsFinished += OnFinishedInstructions;
+        GrassBladeController.GrassBladeDidCut += OnGrassBladeCut;
+
+        camera.m_Lens.OrthographicSize = (7.5f / 10f) * columns;
     }
 
     private void OnDestroy()
     {
         InstructionsController.InstructionsFinished -= OnFinishedInstructions;
+        GrassBladeController.GrassBladeDidCut -= OnGrassBladeCut;
     }
 
     private void Update()
@@ -47,8 +59,9 @@ public class GridGenerator3D : MonoBehaviour
         player.HandleInput();
         player.HandleMovement();
 
-        foreach (var enemy in enemies)
-            enemy.GetComponent<MoleController>().HandleMovement();
+        if (enemies.Count > 0)
+            foreach (var enemy in enemies)
+                enemy.GetComponent<MoleController>().HandleMovement();
     }
 
     public void InitializeGrid()
@@ -95,23 +108,26 @@ public class GridGenerator3D : MonoBehaviour
                 GameObject gridCell = Instantiate(selectedPrefab, gridData[i, j], Quaternion.identity, transform);
             }
         }
+
+        grassBladesCount = GameObject.FindGameObjectsWithTag("GrassBlade").Length;
     }
 
     private void InstantiateEnemies(Vector3[,] gridData)
     {
-        List<int[]> enemyPositions = GetRandomIndices(gridData, enemy1Percent);
+        var targetGridData = RemoveBottomRow(gridData);
+        List<int[]> enemyPositions = GetRandomIndices(targetGridData, enemy1Percent);
 
         List<GameObject> newEnemeies = new List<GameObject>();
 
         foreach (var enemyPos in enemyPositions)
         {
-            Vector3 enemyWorldPos = gridData[enemyPos[0], enemyPos[1]];
+            Vector3 enemyWorldPos = targetGridData[enemyPos[0], enemyPos[1]];
             GameObject enemy1 = Instantiate(enemy1Prefab, enemyWorldPos, Quaternion.identity, transform);
 
-            if (gridData != null)
+            if (targetGridData != null)
             {
                 var controller = enemy1.GetComponent<MoleController>(); 
-                controller.GridData = gridData;
+                controller.GridData = targetGridData;
                 controller.GridPosition = new Vector2(enemyPos[0], enemyPos[1]);
             }
             else
@@ -128,6 +144,29 @@ public class GridGenerator3D : MonoBehaviour
     private void OnFinishedInstructions()
     {
         isGameRunning = true;
+    }
+
+    private void OnGrassBladeCut()
+    {
+        grassBladesCount -= 1;
+        if (grassBladesCount <= 0)
+        {
+            AllGrassBladesCut?.Invoke();
+            
+            foreach (var enemy in enemies)
+            {
+                GameObject explosionObj = Instantiate(explosionPrefab, enemy.transform.position, Quaternion.identity,
+                    transform);
+
+                Destroy(enemy);
+            }
+            
+            CinemachineShake.Instance.ShakeCamera(5f, 1f);
+
+            enemies = new List<GameObject>();
+
+            confettiParticleSystem.Play();
+        }
     }
     
     public List<Vector3> GetRandomElements(Vector3[,] array, float percentage) {
@@ -172,5 +211,24 @@ public class GridGenerator3D : MonoBehaviour
         }
 
         return result;
+    }
+    
+    private Vector3[,] RemoveBottomRow(Vector3[,] array) {
+        int numRows = array.GetLength(0);
+        int numCols = array.GetLength(1);
+
+        int removeRowsCount = 1;
+
+        // Create new array with one less row
+        Vector3[,] newArray = new Vector3[numRows - removeRowsCount, numCols];
+
+        // Copy values from old array to new array
+        for (int i = 0; i < numRows - removeRowsCount; i++) {
+            for (int j = 0; j < numCols; j++) {
+                newArray[i, j] = array[i + removeRowsCount, j];
+            }
+        }
+
+        return newArray;
     }
 }

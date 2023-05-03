@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -21,6 +22,8 @@ public class InstructionsController : MonoBehaviour
     
     private float startTime;
     
+    private static bool didShowInstructions;
+    
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -29,9 +32,16 @@ public class InstructionsController : MonoBehaviour
 
     void Update()
     {
-        if (Time.time < startTime) return;
+        if (!didShowInstructions)
+        {
+            if (Time.time < startTime) return;
 
-        HandleInstructionsState(state);
+            HandleInstructionsState(state);    
+        }
+        else
+        {
+            StartCoroutine(SkipInstructionsCoroutine());
+        }
     }
 
     private void HandleInstructionsState(InstructionsState currentState)
@@ -54,11 +64,20 @@ public class InstructionsController : MonoBehaviour
 
     private IEnumerator HideCoroutine()
     {
+        didShowInstructions = true;
+        
         animator.SetTrigger("End");
 
         yield return new WaitForSeconds(1f);
 
         state = InstructionsState.Hidden;
+        
+        InstructionsFinished?.Invoke();
+    }
+
+    private IEnumerator SkipInstructionsCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
         
         InstructionsFinished?.Invoke();
     }
