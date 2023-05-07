@@ -6,6 +6,8 @@ using UnityEngine;
 public class WinScreenController : MonoBehaviour
 {
     public static event Action PlayerDidWinRestart;
+
+    [SerializeField] private ParticleSystem confettiParticleSystem;
     
     private Animator animator;
     private bool playerDidWin;
@@ -19,7 +21,7 @@ public class WinScreenController : MonoBehaviour
 
     private void Update()
     {
-        if (playerDidWin && Input.GetKeyDown(KeyCode.Space))
+        if (playerDidWin && Input.anyKeyDown)
         {
             PlayerDidWinRestart?.Invoke();
         }
@@ -33,6 +35,8 @@ public class WinScreenController : MonoBehaviour
     private void OnAllGrassBladesCut()
     {
         animator.SetTrigger("Start");
+        confettiParticleSystem.Play();
+        CinemachineShake.Instance.ShakeCamera(5f, 1f);
         playerDidWin = true;
     }
 }

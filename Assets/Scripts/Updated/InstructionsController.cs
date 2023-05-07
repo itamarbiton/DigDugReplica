@@ -8,6 +8,7 @@ using UnityEngine;
 public enum InstructionsState
 {
     Start,
+    Controls,
     Visible,
     Hidden
 }
@@ -54,6 +55,15 @@ public class InstructionsController : MonoBehaviour
                 break;
             
             case InstructionsState.Visible:
+                if (Input.anyKeyDown)
+                {
+                    animator.SetTrigger("Controls");
+                    state = InstructionsState.Controls;
+                }
+                
+                break;
+            
+            case InstructionsState.Controls:
                 if (Input.anyKeyDown) StartCoroutine(HideCoroutine());
                 break;
             

@@ -1,23 +1,34 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 public class MoleController : MonoBehaviour
 {
     public Vector3[,] GridData;
     public Vector2 GridPosition = new(0, 0);
+    public bool IsWalking { get; private set; }
 
     [SerializeField] private float speed = 3f;
     [SerializeField] private float waitRange = .5f;
+    [SerializeField] private Object explosionPrefab;
 
     private Animator animator;
-
-    public bool IsWalking { get; private set; }
-
-    private List<Vector3> availableDirections =
-        new List<Vector3> { Vector3.left, Vector3.right, Vector3.forward, Vector3.back };
+    private List<Vector3> availableDirections = new() { Vector3.left, Vector3.right, Vector3.forward, Vector3.back };
     private Vector3 direction = Vector3.right;
-    
+
+    private void OnEnable()
+    {
+        SubscribeEvents();
+    }
+
+    private void OnDisable()
+    {
+        UnsubscribeEvents();
+    }
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -77,4 +88,24 @@ public class MoleController : MonoBehaviour
 
         IsWalking = false;
     }
+
+    #region Event Handling
+
+    private void SubscribeEvents()
+    {
+        GridGenerator3D.AllGrassBladesCut += OnAllGrassBladesCut;
+    }
+
+    private void UnsubscribeEvents()
+    {
+        GridGenerator3D.AllGrassBladesCut -= OnAllGrassBladesCut;
+    }
+
+    private void OnAllGrassBladesCut()
+    {
+        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        Destroy(gameObject);
+    }
+
+    #endregion
 }

@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class RoomController : MonoBehaviour
 {
+    [SerializeField] private GridGenerator3D gridGenerator;
     [SerializeField] private GameObject leftWallPrefab;
     [SerializeField] private GameObject topLeftCornerPrefab;
-    [SerializeField] private float width;
-    [SerializeField] private float height;
-    
+
     // Start is called before the first frame update
     void Start()
     {
-        CreateRoom(leftWallPrefab, topLeftCornerPrefab, width, height);
+        CreateRoom(leftWallPrefab, topLeftCornerPrefab, gridGenerator.columns, gridGenerator.rows);
     }
 
     // Update is called once per frame
