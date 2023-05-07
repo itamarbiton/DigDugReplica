@@ -5,7 +5,7 @@ using Updated;
 using Updated.Utilities;
 using Random = UnityEngine.Random;
 
-public class GridGenerator3D : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     private GridManager gridManager;
     private EnemyManager enemyManager;
