@@ -11,18 +11,15 @@ namespace Updated
         [System.Serializable]
         public class LevelData
         {
-            public int width;
-            public int height;
-            public List<GridManager.SpecialPrefab> specialPrefabs;
-            public List<GameObject> normalPrefabs;
+            public GridManager.GridConfiguration gridConfig;
             public float enemyPercent;
         }
 
-        public static LevelData currentLevel { get; private set; }
+        public static LevelData CurrentLevel { get; private set; }
 
         [SerializeField] private List<LevelData> levels;
         
-        private static int currentLevelIndex = 0;
+        private static int _currentLevelIndex = 0;
 
         private void OnEnable()
         {
@@ -36,9 +33,9 @@ namespace Updated
 
         private void Awake()
         {
-            if (currentLevel == null)
+            if (CurrentLevel == null)
             {
-                currentLevel = levels.First();
+                CurrentLevel = levels.First();
             }
         }
 
@@ -61,10 +58,10 @@ namespace Updated
 
         private void OnPlayerDidWin()
         {
-            if (currentLevelIndex < levels.Count - 1)
+            if (_currentLevelIndex < levels.Count - 1)
             {
-                currentLevelIndex++;
-                currentLevel = levels[currentLevelIndex];
+                _currentLevelIndex++;
+                CurrentLevel = levels[_currentLevelIndex];
             }
         }
     }

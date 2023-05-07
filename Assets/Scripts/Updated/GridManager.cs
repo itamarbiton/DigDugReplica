@@ -21,73 +21,97 @@ namespace Updated
             public int height;
         }
 
-        [SerializeField] private List<GameObject> normalPrefabs;
-        [SerializeField] private List<SpecialPrefab> specialPrefabs;
-        [SerializeField] private int gridWidth;
-        [SerializeField] private int gridHeight;
-        [SerializeField] private float gridCellSize = 1f;
-        [SerializeField] private int seed;
+        [System.Serializable]
+        public class GridConfiguration
+        {
+            public List<GameObject> normalPrefabs;
+            public List<SpecialPrefab> specialPrefabs;
+            public int gridWidth;
+            public int gridHeight;
+            public float gridCellSize = 1f;
+            public int seed;
+            public float targetGroupRadius;
+        }
+
+        [SerializeField] private GridConfiguration config;
 
         private bool[,] grid;
+
+        #region Gizmos
+
+        private void OnDrawGizmos()
+        {
+            Random.InitState(config.seed);
+
+            bool[,] gizmoGrid = new bool[config.gridWidth, config.gridHeight];
+            GameObject[,] gizmoGridGameObjects = new GameObject[config.gridWidth, config.gridHeight];
+
+            PlaceSpecialPrefabs(gizmoGrid, new GizmoGridInstanceProvider(Color.blue, config.gridCellSize));
+
+            FillRemainingGridWithNormalPrefab(gizmoGrid, gizmoGridGameObjects,
+                new GizmoGridInstanceProvider(Color.green, config.gridCellSize));
+        }
+
+        #endregion
 
         #region Initialization
 
         public void InitializeGrid()
         {
-            Random.InitState(seed);
+            Random.InitState(config.seed);
 
-            if (LevelDataProvider.currentLevel != null)
-            {
-                LevelDataProvider.LevelData currentLevel = LevelDataProvider.currentLevel;
-                
-                gridWidth = currentLevel.width;
-                gridHeight = currentLevel.height;
-                
-                grid = new bool[currentLevel.width, currentLevel.height];
-                GridGameObjects = new GameObject[currentLevel.width, currentLevel.height];
-                
-                normalPrefabs = currentLevel.normalPrefabs;
-                specialPrefabs = currentLevel.specialPrefabs;
-            }
-            else
-            {
-                grid = new bool[gridWidth, gridHeight];
-                GridGameObjects = new GameObject[gridWidth, gridHeight];
-            }
-            
-            PlaceSpecialPrefabs();
-            
-            FillRemainingGridWithNormalPrefab();
-            
+            grid = new bool[config.gridWidth, config.gridHeight];
+            GridGameObjects = new GameObject[config.gridWidth, config.gridHeight];
+
+            PlaceSpecialPrefabs(grid, new ObjectsGridInstanceProvider());
+
+            FillRemainingGridWithNormalPrefab(grid, GridGameObjects, new ObjectsGridInstanceProvider());
+
             GridDidLoad?.Invoke(this);
         }
-        
+
+        #endregion
+
+        #region Configuration
+
+        public void SetConfiguration(GridConfiguration config)
+        {
+            this.config = config;
+        }
+
         #endregion
 
         #region Utilities
 
         public int GetWidth()
         {
-            return gridWidth;
+            return config.gridWidth;
         }
 
         public int GetHeight()
         {
-            return gridHeight;
+            return config.gridHeight;
+        }
+
+        public GridConfiguration GetConfiguration()
+        {
+            return config;
         }
 
         public Vector3[,] GetWorldPositionsGrid()
         {
-            Vector3[,] worldPositionsGrid = new Vector3[gridWidth, gridHeight];
+            Vector3[,] worldPositionsGrid = new Vector3[config.gridWidth, config.gridHeight];
 
-            for (int x = 0; x < gridWidth; x++)
+            for (int x = 0; x < config.gridWidth; x++)
             {
-                for (int y = 0; y < gridHeight; y++)
+                for (int y = 0; y < config.gridHeight; y++)
                 {
                     Vector3 position = new Vector3(
-                        x * gridCellSize - gridWidth * gridCellSize / 2f + gridCellSize / 2f,
+                        x * config.gridCellSize - config.gridWidth * config.gridCellSize / 2f +
+                        config.gridCellSize / 2f,
                         0,
-                        y * gridCellSize - gridHeight * gridCellSize / 2f + gridCellSize / 2f);
+                        y * config.gridCellSize - config.gridHeight * config.gridCellSize / 2f +
+                        config.gridCellSize / 2f);
                     worldPositionsGrid[x, y] = position;
                 }
             }
@@ -96,30 +120,31 @@ namespace Updated
         }
 
         #endregion
-        
+
         #region Private Implementation Details
 
-        private void PlaceSpecialPrefabs()
+        private void PlaceSpecialPrefabs(bool[,] grid, IGridInstanceProvider instanceProvider)
         {
-            foreach (SpecialPrefab specialPrefab in specialPrefabs)
+            foreach (SpecialPrefab specialPrefab in config.specialPrefabs)
             {
                 for (int i = 0; i < specialPrefab.count; i++)
                 {
-                    PlaceSpecialPrefab(specialPrefab);
+                    PlaceSpecialPrefab(grid, specialPrefab, instanceProvider);
                 }
             }
         }
 
-        private void PlaceSpecialPrefab(SpecialPrefab specialPrefab)
+        private void PlaceSpecialPrefab(bool[,] grid, SpecialPrefab specialPrefab,
+            IGridInstanceProvider instanceProvider)
         {
             bool placed = false;
 
             while (!placed)
             {
-                int x = Random.Range(0, gridWidth - specialPrefab.width + 1);
-                int y = Random.Range(0, gridHeight - specialPrefab.height + 1);
+                int x = Random.Range(0, config.gridWidth - specialPrefab.width + 1);
+                int y = Random.Range(0, config.gridHeight - specialPrefab.height + 1);
 
-                if (IsAreaFree(x, y, specialPrefab.width, specialPrefab.height))
+                if (IsAreaFree(grid, x, y, specialPrefab.width, specialPrefab.height))
                 {
                     for (int i = x; i < x + specialPrefab.width; i++)
                     {
@@ -130,17 +155,21 @@ namespace Updated
                     }
 
                     Vector3 position = new Vector3(
-                        (x + specialPrefab.width / 2f - 0.5f) * gridCellSize - gridWidth * gridCellSize / 2f +
-                        gridCellSize / 2f, 0,
-                        (y + specialPrefab.height / 2f - 0.5f) * gridCellSize - gridHeight * gridCellSize / 2f +
-                        gridCellSize / 2f);
-                    Instantiate(specialPrefab.prefab, position, Quaternion.identity, transform);
+                        (x + specialPrefab.width / 2f - 0.5f) * config.gridCellSize -
+                        config.gridWidth * config.gridCellSize / 2f +
+                        config.gridCellSize / 2f, 0,
+                        (y + specialPrefab.height / 2f - 0.5f) * config.gridCellSize -
+                        config.gridHeight * config.gridCellSize / 2f +
+                        config.gridCellSize / 2f);
+
+                    instanceProvider.Instantiate(specialPrefab.prefab, position, Quaternion.identity, transform);
+
                     placed = true;
                 }
             }
         }
 
-        private bool IsAreaFree(int startX, int startY, int width, int height)
+        private bool IsAreaFree(bool[,] grid, int startX, int startY, int width, int height)
         {
             for (int x = startX; x < startX + width; x++)
             {
@@ -156,27 +185,64 @@ namespace Updated
             return true;
         }
 
-        private void FillRemainingGridWithNormalPrefab()
+        private void FillRemainingGridWithNormalPrefab(bool[,] grid, GameObject[,] gridGameObjects,
+            IGridInstanceProvider instanceProvider)
         {
-            for (int x = 0; x < gridWidth; x++)
+            for (int x = 0; x < config.gridWidth; x++)
             {
-                for (int y = 0; y < gridHeight; y++)
+                for (int y = 0; y < config.gridHeight; y++)
                 {
                     if (!grid[x, y])
                     {
                         Vector3 position =
-                            new Vector3(x * gridCellSize - gridWidth * gridCellSize / 2f + gridCellSize / 2f, 0,
-                                y * gridCellSize - gridHeight * gridCellSize / 2f + gridCellSize / 2f);
-                        
-                        GameObject selectedPrefab = normalPrefabs[Random.Range(0, normalPrefabs.Count)];
-                        GameObject normal = Instantiate(selectedPrefab, position, Quaternion.identity, transform);
-                        
-                        GridGameObjects.SetValue(normal, x, y);
+                            new Vector3(
+                                x * config.gridCellSize - config.gridWidth * config.gridCellSize / 2f +
+                                config.gridCellSize / 2f, 0,
+                                y * config.gridCellSize - config.gridHeight * config.gridCellSize / 2f +
+                                config.gridCellSize / 2f);
+
+                        GameObject selectedPrefab = config.normalPrefabs[Random.Range(0, config.normalPrefabs.Count)];
+
+                        GameObject normal = instanceProvider.Instantiate(selectedPrefab, position, Quaternion.identity,
+                            transform);
+
+                        gridGameObjects.SetValue(normal, x, y);
                     }
                 }
             }
         }
-        
+
         #endregion
+    }
+
+    interface IGridInstanceProvider
+    {
+        public GameObject Instantiate(GameObject gameObject, Vector3 position, Quaternion rotation, Transform parent);
+    }
+
+    public class ObjectsGridInstanceProvider : IGridInstanceProvider
+    {
+        public GameObject Instantiate(GameObject gameObject, Vector3 position, Quaternion rotation, Transform parent)
+        {
+            return GameObject.Instantiate(gameObject, position, rotation, parent);
+        }
+    }
+
+    public class GizmoGridInstanceProvider : IGridInstanceProvider
+    {
+        private float resolution;
+
+        public GizmoGridInstanceProvider(Color gizmoColor, float resolution)
+        {
+            Gizmos.color = gizmoColor;
+            this.resolution = resolution;
+        }
+
+        public GameObject Instantiate(GameObject gameObject, Vector3 position, Quaternion rotation, Transform parent)
+        {
+            Gizmos.DrawWireCube(position, new Vector3(resolution, .1f, resolution));
+
+            return null;
+        }
     }
 }

@@ -32,6 +32,9 @@ public class GameManager : MonoBehaviour
         enemyManager = GetComponent<EnemyManager>();
         playerManager = GetComponent<PlayerManager>();
         
+        gridManager.SetConfiguration(LevelDataProvider.CurrentLevel.gridConfig);
+        enemyManager.SetEnemyPercent(LevelDataProvider.CurrentLevel.enemyPercent);
+        
         gridManager.InitializeGrid();
     }
 
@@ -39,16 +42,6 @@ public class GameManager : MonoBehaviour
     {
         if (!isGameRunning) return;
 
-        KeyCode current = KeyCode.None;
-        if (Input.GetKeyDown(KeyCode.RightArrow)) current = KeyCode.RightArrow;
-        else if (Input.GetKeyDown(KeyCode.LeftArrow)) current = KeyCode.LeftArrow;
-        else if (Input.GetKeyDown(KeyCode.UpArrow)) current = KeyCode.UpArrow;
-        else if (Input.GetKeyDown(KeyCode.DownArrow)) current = KeyCode.DownArrow;
-        if (current != KeyCode.None)
-        {
-            playerManager.ChangeDirectionOnArrow(current);
-        }
-        
         HandleMovement();
     }
 
@@ -64,9 +57,10 @@ public class GameManager : MonoBehaviour
     {
         if (playerManager != null)
         {
+            HandlePlayerKeyboardNavigation();
+            
             playerManager.HandleMovement();    
         }
-        
 
         if (enemyManager != null)
         {
@@ -79,6 +73,19 @@ public class GameManager : MonoBehaviour
         if (playerManager != null)
         {
             playerManager.HandlePhysics();
+        }
+    }
+
+    private void HandlePlayerKeyboardNavigation()
+    {
+        KeyCode current = KeyCode.None;
+        if (Input.GetKeyDown(KeyCode.RightArrow)) current = KeyCode.RightArrow;
+        else if (Input.GetKeyDown(KeyCode.LeftArrow)) current = KeyCode.LeftArrow;
+        else if (Input.GetKeyDown(KeyCode.UpArrow)) current = KeyCode.UpArrow;
+        else if (Input.GetKeyDown(KeyCode.DownArrow)) current = KeyCode.DownArrow;
+        if (current != KeyCode.None)
+        {
+            playerManager.ChangeDirectionOnArrow(current);
         }
     }
 
@@ -112,6 +119,15 @@ public class GameManager : MonoBehaviour
         {
             playerManager.ChangeDirectionOnSideTap(side);
         }
+    }
+
+    #endregion
+    
+    #region Private Implementation Details
+
+    private void UpdateConfigurations()
+    {
+        enemyManager.SetEnemyPercent(LevelDataProvider.CurrentLevel.enemyPercent);
     }
 
     #endregion

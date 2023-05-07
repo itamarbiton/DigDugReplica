@@ -664,7 +664,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 229692856}
-  m_LocalRotation: {x: 0.45758155, y: 0.000000010422694, z: -0.000000005363704, w: 0.88916767}
+  m_LocalRotation: {x: 0.45758158, y: -0.000000028475307, z: 0.000000014653901, w: 0.88916767}
   m_LocalPosition: {x: -9, y: 14, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1046,18 +1046,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c87e486674b4eb1830e56c6d52ce160, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  normalPrefabs:
-  - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
-  - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
-  specialPrefabs:
-  - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
-    count: 2
-    width: 2
-    height: 2
-  gridWidth: 10
-  gridHeight: 5
-  gridCellSize: 2
-  seed: 1010001
+  config:
+    normalPrefabs:
+    - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
+    specialPrefabs:
+    - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
+      count: 1
+      width: 2
+      height: 2
+    gridWidth: 12
+    gridHeight: 9
+    gridCellSize: 2
+    seed: 1114110
+    targetGroupRadius: 0
 --- !u!114 &524489438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1071,61 +1072,111 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levels:
-  - width: 5
-    height: 3
-    specialPrefabs:
-    - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
-      count: 0
-      width: 2
-      height: 2
-    normalPrefabs:
-    - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
-    - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
+  - gridConfig:
+      normalPrefabs:
+      - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
+      - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
+      specialPrefabs:
+      - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
+        count: 0
+        width: 2
+        height: 2
+      gridWidth: 4
+      gridHeight: 4
+      gridCellSize: 2
+      seed: 0
+      targetGroupRadius: 3
     enemyPercent: 0
-  - width: 6
-    height: 4
-    specialPrefabs:
-    - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
-      count: 0
-      width: 2
-      height: 2
-    normalPrefabs:
-    - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
-    - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
-    enemyPercent: 0.07
-  - width: 7
-    height: 4
-    specialPrefabs:
-    - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
-      count: 1
-      width: 2
-      height: 2
-    normalPrefabs:
-    - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
-    - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
-    enemyPercent: 0.07
-  - width: 9
-    height: 7
-    specialPrefabs:
-    - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
-      count: 1
-      width: 2
-      height: 2
-    normalPrefabs:
-    - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
-    - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
-    enemyPercent: 0.12
-  - width: 8
-    height: 5
-    specialPrefabs:
-    - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
-      count: 2
-      width: 2
-      height: 2
-    normalPrefabs:
-    - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
-    - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
-    enemyPercent: 0.1
+  - gridConfig:
+      normalPrefabs:
+      - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
+      - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
+      specialPrefabs:
+      - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
+        count: 0
+        width: 2
+        height: 2
+      gridWidth: 5
+      gridHeight: 5
+      gridCellSize: 2
+      seed: 0
+      targetGroupRadius: 2
+    enemyPercent: 0
+  - gridConfig:
+      normalPrefabs:
+      - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
+      - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
+      specialPrefabs:
+      - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
+        count: 1
+        width: 2
+        height: 2
+      gridWidth: 6
+      gridHeight: 6
+      gridCellSize: 2
+      seed: 2345678
+      targetGroupRadius: 1.5
+    enemyPercent: 0
+  - gridConfig:
+      normalPrefabs:
+      - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
+      - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
+      specialPrefabs:
+      - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
+        count: 2
+        width: 2
+        height: 2
+      gridWidth: 7
+      gridHeight: 7
+      gridCellSize: 2
+      seed: 12121255
+      targetGroupRadius: 1.5
+    enemyPercent: 0
+  - gridConfig:
+      normalPrefabs:
+      - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
+      - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
+      specialPrefabs:
+      - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
+        count: 3
+        width: 2
+        height: 2
+      gridWidth: 8
+      gridHeight: 7
+      gridCellSize: 2
+      seed: -1023456
+      targetGroupRadius: 1.5
+    enemyPercent: 0
+  - gridConfig:
+      normalPrefabs:
+      - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
+      - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
+      specialPrefabs:
+      - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
+        count: 2
+        width: 2
+        height: 2
+      gridWidth: 9
+      gridHeight: 9
+      gridCellSize: 2
+      seed: -444444
+      targetGroupRadius: 1.5
+    enemyPercent: 0
+  - gridConfig:
+      normalPrefabs:
+      - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
+      - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
+      specialPrefabs:
+      - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
+        count: 1
+        width: 2
+        height: 2
+      gridWidth: 12
+      gridHeight: 9
+      gridCellSize: 2
+      seed: 1114110
+      targetGroupRadius: 1.5
+    enemyPercent: 0
 --- !u!1 &578810566
 GameObject:
   m_ObjectHideFlags: 0
@@ -2611,7 +2662,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1461347073}
-  m_LocalRotation: {x: 0.45758155, y: 0.000000010422694, z: -0.000000005363704, w: 0.88916767}
+  m_LocalRotation: {x: 0.45758158, y: -0.000000028475307, z: 0.000000014653901, w: 0.88916767}
   m_LocalPosition: {x: -9, y: 14, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

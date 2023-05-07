@@ -23,6 +23,15 @@ namespace Updated
             UnsubscribeEvents();
         }
 
+        #region Configuration
+
+        public void SetEnemyPercent(float percent)
+        {
+            enemyPercent = percent;
+        }
+
+        #endregion
+
         #region Game Handling
 
         public void HandleMovement()
@@ -49,12 +58,7 @@ namespace Updated
                 Debug.LogError("failed to instantiate enemies, no enemy prefabs were set");
                 return;
             }
-            
-            if (LevelDataProvider.currentLevel != null)
-            {
-                enemyPercent = LevelDataProvider.currentLevel.enemyPercent;
-            }
-            
+
             var targetGridData = Vector3Utils.RemoveBottomRow(gridData);
             List<int[]> enemyPositions = Vector3Utils.GetRandomIndices(targetGridData, enemyPercent);
 

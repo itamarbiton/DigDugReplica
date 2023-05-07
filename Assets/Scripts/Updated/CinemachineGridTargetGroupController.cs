@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 using Updated;
 
 [RequireComponent(typeof(CinemachineTargetGroup))]
-public class CinemachineGridTargetController : MonoBehaviour
+public class CinemachineGridTargetGroupController : MonoBehaviour
 {
     [SerializeField] private float targetRadius = 0.2f;
     
@@ -45,7 +45,7 @@ public class CinemachineGridTargetController : MonoBehaviour
         {
             target = gridGenerator.GridGameObjects[0, 0].transform,
             weight = 1,
-            radius = targetRadius
+            radius = gridGenerator.GetConfiguration().targetGroupRadius
         }, 0);
 
         var rows = gridGenerator.GridGameObjects.GetLength(0);
@@ -55,7 +55,7 @@ public class CinemachineGridTargetController : MonoBehaviour
         {
             target = gridGenerator.GridGameObjects[rows - 1, cols - 1].transform,
             weight = 1,
-            radius = targetRadius
+            radius = gridGenerator.GetConfiguration().targetGroupRadius
         }, 1);
     }
 
