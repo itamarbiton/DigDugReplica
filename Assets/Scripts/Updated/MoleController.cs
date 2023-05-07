@@ -94,15 +94,15 @@ public class MoleController : MonoBehaviour
 
     private void SubscribeEvents()
     {
-        GridManager.AllGrassBladesCut += OnAllGrassBladesCut;
+        WinConditionController.PlayerDidWin += OnPlayerDidWin;
     }
 
     private void UnsubscribeEvents()
     {
-        GridManager.AllGrassBladesCut -= OnAllGrassBladesCut;
+        WinConditionController.PlayerDidWin -= OnPlayerDidWin;
     }
 
-    private void OnAllGrassBladesCut()
+    private void OnPlayerDidWin()
     {
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);

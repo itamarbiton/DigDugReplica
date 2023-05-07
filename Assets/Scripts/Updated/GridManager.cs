@@ -8,7 +8,6 @@ namespace Updated
     public class GridManager : MonoBehaviour
     {
         public static event Action<GridManager> GridDidLoad;
-        public static event Action AllGrassBladesCut;
         
         public Vector3[,] GridData { get; private set; }
         public GameObject[,] GridGameObjects { get; private set; }
@@ -17,18 +16,6 @@ namespace Updated
         [SerializeField] public int columns;
         [SerializeField] private float spacing;
         [SerializeField] private List<GameObject> gridPrefabs;
-
-        private int grassBladesCount;
-
-        private void OnEnable()
-        {
-            SubscribeEvents();
-        }
-
-        private void OnDisable()
-        {
-            UnsubscribeEvents();
-        }
 
         #region Initialization
 
@@ -39,30 +26,6 @@ namespace Updated
             InstantiateGrid(GridData);
             
             GridDidLoad?.Invoke(this);
-        }
-
-        #endregion
-
-        #region Event Handling
-
-        private void SubscribeEvents()
-        {
-            GrassBladeController.GrassBladeDidCut += OnGrassBladeCut;
-        }
-
-        private void UnsubscribeEvents()
-        {
-            GrassBladeController.GrassBladeDidCut -= OnGrassBladeCut;
-        }
-
-        private void OnGrassBladeCut()
-        {
-            grassBladesCount -= 1;
-        
-            if (grassBladesCount <= 0)
-            {
-                AllGrassBladesCut?.Invoke();
-            }
         }
 
         #endregion
@@ -113,8 +76,6 @@ namespace Updated
                     GridGameObjects.SetValue(gridCell, i, j);
                 }
             }
-
-            grassBladesCount = GameObject.FindGameObjectsWithTag("GrassBlade").Length;
         }
 
         #endregion

@@ -60,15 +60,15 @@ public class Grid3DPlayerController : MonoBehaviour
 
     private void SubscribeEvents()
     {
-        GridManager.AllGrassBladesCut += OnAllGrassBladesCut;
+        WinConditionController.PlayerDidWin += OnPlayerDidWin;
     }
 
     private void UnsubscribeEvents()
     {
-        GridManager.AllGrassBladesCut -= OnAllGrassBladesCut;
+        WinConditionController.PlayerDidWin -= OnPlayerDidWin;
     }
     
-    private void OnAllGrassBladesCut()
+    private void OnPlayerDidWin()
     {
         didWin = true;
     }

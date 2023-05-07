@@ -13,11 +13,29 @@ public class WinScreenController : MonoBehaviour
     private Animator animator;
     private bool playerDidWin;
 
+    private void OnEnable()
+    {
+        SubscribeEvents();
+    }
+
+    private void OnDisable()
+    {
+        UnsusbscribeEvents();
+    }
+
+    private void SubscribeEvents()
+    {
+        WinConditionController.PlayerDidWin += PlayerDidWin;
+    }
+
+    private void UnsusbscribeEvents()
+    {
+        WinConditionController.PlayerDidWin -= PlayerDidWin;
+    }
+
     void Start()
     {
         animator = GetComponent<Animator>();
-
-        GridManager.AllGrassBladesCut += OnAllGrassBladesCut;
     }
 
     private void Update()
@@ -28,12 +46,7 @@ public class WinScreenController : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
-        GridManager.AllGrassBladesCut -= OnAllGrassBladesCut;
-    }
-
-    private void OnAllGrassBladesCut()
+    private void PlayerDidWin()
     {
         animator.SetTrigger("Start");
         confettiParticleSystem.Play();
