@@ -12,7 +12,7 @@ public class RoomController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CreateRoom(leftWallPrefab, topLeftCornerPrefab, gridGenerator.columns, gridGenerator.rows);
+        CreateRoom(leftWallPrefab, topLeftCornerPrefab, gridGenerator.GetWidth(), gridGenerator.GetHeight());
     }
 
     public void CreateRoom(GameObject leftWallPrefab, GameObject topLeftCornerPrefab, float halfWidth, float halfHeight) {

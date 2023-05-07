@@ -34,6 +34,12 @@ public class Grid3DPlayerController : MonoBehaviour
     private float walkDuration = .15f;
     private float walkTimer;
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(GridData[(int)nextGridPosition.x, (int)nextGridPosition.y], Vector3.one * .5f);
+    }
+
     private void OnEnable()
     {
         SubscribeEvents();
@@ -54,6 +60,8 @@ public class Grid3DPlayerController : MonoBehaviour
     {
         HandleSmoke();
         HandlePitch();
+        
+        Debug.DrawRay(transform.position, direction.normalized * 10, Color.red);
     }
 
     #region Event Handling
@@ -104,8 +112,8 @@ public class Grid3DPlayerController : MonoBehaviour
         if (!IsAlive || GridData == null || GridData.Length == 0 || IsWalking) return;
 
         Vector2 targetGridPosition = new Vector2(
-            gridPosition.x + direction.z,
-            gridPosition.y + direction.x);
+            gridPosition.x + direction.x,
+            gridPosition.y + direction.z);
 
         if (IsTargetGridPositionOutOfBounds(targetGridPosition)) return;
 

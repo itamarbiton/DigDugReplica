@@ -8,76 +8,159 @@ namespace Updated
     public class GridManager : MonoBehaviour
     {
         public static event Action<GridManager> GridDidLoad;
-        
-        public Vector3[,] GridData { get; private set; }
+
+        public Vector3[,] GridData => GetWorldPositionsGrid();
         public GameObject[,] GridGameObjects { get; private set; }
 
-        [SerializeField] public int rows;
-        [SerializeField] public int columns;
-        [SerializeField] private float spacing;
-        [SerializeField] private List<GameObject> gridPrefabs;
+        [System.Serializable]
+        public class SpecialPrefab
+        {
+            public GameObject prefab;
+            public int count;
+            public int width;
+            public int height;
+        }
+
+        [SerializeField] private List<GameObject> normalPrefabs;
+        [SerializeField] private List<SpecialPrefab> specialPrefabs;
+        [SerializeField] private int gridWidth;
+        [SerializeField] private int gridHeight;
+        [SerializeField] private float gridCellSize = 1f;
+        [SerializeField] private int seed;
+
+        private bool[,] grid;
 
         #region Initialization
 
         public void InitializeGrid()
         {
-            GridData = GenerateGridData();
+            Random.InitState(seed);
             
-            InstantiateGrid(GridData);
+            grid = new bool[gridWidth, gridHeight];
+            GridGameObjects = new GameObject[gridWidth, gridHeight];
+            
+            PlaceSpecialPrefabs();
+            
+            FillRemainingGridWithNormalPrefab();
             
             GridDidLoad?.Invoke(this);
         }
-
+        
         #endregion
 
+        #region Utilities
+
+        public int GetWidth()
+        {
+            return gridWidth;
+        }
+
+        public int GetHeight()
+        {
+            return gridHeight;
+        }
+
+        public Vector3[,] GetWorldPositionsGrid()
+        {
+            Vector3[,] worldPositionsGrid = new Vector3[gridWidth, gridHeight];
+
+            for (int x = 0; x < gridWidth; x++)
+            {
+                for (int y = 0; y < gridHeight; y++)
+                {
+                    Vector3 position = new Vector3(
+                        x * gridCellSize - gridWidth * gridCellSize / 2f + gridCellSize / 2f,
+                        0,
+                        y * gridCellSize - gridHeight * gridCellSize / 2f + gridCellSize / 2f);
+                    worldPositionsGrid[x, y] = position;
+                }
+            }
+
+            return worldPositionsGrid;
+        }
+
+        #endregion
+        
         #region Private Implementation Details
 
-        private Vector3[,] GenerateGridData()
+        private void PlaceSpecialPrefabs()
         {
-            Vector3[,] gridData = new Vector3[rows, columns];
+            foreach (SpecialPrefab specialPrefab in specialPrefabs)
+            {
+                for (int i = 0; i < specialPrefab.count; i++)
+                {
+                    PlaceSpecialPrefab(specialPrefab);
+                }
+            }
+        }
 
-            var position = transform.position;
-            Vector3 gridStartPosition = new Vector3(
-                position.x - (columns * spacing) / 2 + spacing / 2,
-                0,
-                position.z - (rows * spacing) / 2 + spacing / 2);
+        private void PlaceSpecialPrefab(SpecialPrefab specialPrefab)
+        {
+            bool placed = false;
+
+            while (!placed)
+            {
+                int x = Random.Range(0, gridWidth - specialPrefab.width + 1);
+                int y = Random.Range(0, gridHeight - specialPrefab.height + 1);
+
+                if (IsAreaFree(x, y, specialPrefab.width, specialPrefab.height))
+                {
+                    for (int i = x; i < x + specialPrefab.width; i++)
+                    {
+                        for (int j = y; j < y + specialPrefab.height; j++)
+                        {
+                            grid[i, j] = true;
+                        }
+                    }
+
+                    Vector3 position = new Vector3(
+                        (x + specialPrefab.width / 2f - 0.5f) * gridCellSize - gridWidth * gridCellSize / 2f +
+                        gridCellSize / 2f, 0,
+                        (y + specialPrefab.height / 2f - 0.5f) * gridCellSize - gridHeight * gridCellSize / 2f +
+                        gridCellSize / 2f);
+                    Instantiate(specialPrefab.prefab, position, Quaternion.identity, transform);
+                    placed = true;
+                }
+            }
+        }
+
+        private bool IsAreaFree(int startX, int startY, int width, int height)
+        {
+            for (int x = startX; x < startX + width; x++)
+            {
+                for (int y = startY; y < startY + height; y++)
+                {
+                    if (grid[x, y])
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private void FillRemainingGridWithNormalPrefab()
+        {
+            for (int x = 0; x < gridWidth; x++)
+            {
+                for (int y = 0; y < gridHeight; y++)
+                {
+                    if (!grid[x, y])
+                    {
+                        Vector3 position =
+                            new Vector3(x * gridCellSize - gridWidth * gridCellSize / 2f + gridCellSize / 2f, 0,
+                                y * gridCellSize - gridHeight * gridCellSize / 2f + gridCellSize / 2f);
+                        
+                        GameObject selectedPrefab = normalPrefabs[Random.Range(0, normalPrefabs.Count)];
+                        GameObject normal = Instantiate(selectedPrefab, position, Quaternion.identity, transform);
+                        
+                        GridGameObjects.SetValue(normal, x, y);
+                    }
+                }
+            }
+        }
         
-            for (int i = 0; i < rows; i++)
-            {
-                for (int j = 0; j < columns; j++)
-                {
-                    Vector3 cellPosition = new Vector3(
-                        gridStartPosition.x + j * spacing,
-                        0,
-                        gridStartPosition.z + i * spacing);
-
-                    gridData[i, j] = cellPosition;
-                }
-            }
-
-            return gridData;
-        }
-
-        private void InstantiateGrid(Vector3[,] gridData)
-        {
-            int rows = gridData.GetLength(0);
-            int cols = gridData.GetLength(1);
-
-            GridGameObjects = new GameObject[rows, columns];
-
-            for (int i = 0; i < rows; i++)
-            {
-                for (int j = 0; j < cols; j++)
-                {
-                    // Instantiate the cell prefab at the stored position
-                    GameObject selectedPrefab = gridPrefabs[Random.Range(0, gridPrefabs.Count)]; 
-                    GameObject gridCell = Instantiate(selectedPrefab, gridData[i, j], Quaternion.identity, transform);
-                
-                    GridGameObjects.SetValue(gridCell, i, j);
-                }
-            }
-        }
-
         #endregion
     }
 }
