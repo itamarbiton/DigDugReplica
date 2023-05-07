@@ -69,9 +69,9 @@ namespace Updated
                 for (int y = 0; y < gridHeight; y++)
                 {
                     Vector3 position = new Vector3(
-                        y * gridCellSize - gridHeight * gridCellSize / 2f + gridCellSize / 2f,
+                        x * gridCellSize - gridWidth * gridCellSize / 2f + gridCellSize / 2f,
                         0,
-                        x * gridCellSize - gridWidth * gridCellSize / 2f + gridCellSize / 2f);
+                        y * gridCellSize - gridHeight * gridCellSize / 2f + gridCellSize / 2f);
                     worldPositionsGrid[x, y] = position;
                 }
             }

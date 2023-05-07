@@ -1049,14 +1049,14 @@ MonoBehaviour:
   - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
   - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
   specialPrefabs:
-  - prefab: {fileID: 6822372163368656575, guid: 675e0383b4293ad40b957d549c5db668, type: 3}
-    count: 1
-    width: 1
-    height: 1
-  gridWidth: 5
+  - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
+    count: 2
+    width: 2
+    height: 2
+  gridWidth: 10
   gridHeight: 5
   gridCellSize: 2
-  seed: 0
+  seed: 1010001
 --- !u!1 &578810566
 GameObject:
   m_ObjectHideFlags: 0

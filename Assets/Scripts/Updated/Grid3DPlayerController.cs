@@ -112,8 +112,8 @@ public class Grid3DPlayerController : MonoBehaviour
         if (!IsAlive || GridData == null || GridData.Length == 0 || IsWalking) return;
 
         Vector2 targetGridPosition = new Vector2(
-            gridPosition.x + direction.z,
-            gridPosition.y + direction.x);
+            gridPosition.x + direction.x,
+            gridPosition.y + direction.z);
 
         if (IsTargetGridPositionOutOfBounds(targetGridPosition)) return;
 
