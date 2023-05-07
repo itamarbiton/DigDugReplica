@@ -60,12 +60,12 @@ public class Grid3DPlayerController : MonoBehaviour
 
     private void SubscribeEvents()
     {
-        GridGenerator3D.AllGrassBladesCut += OnAllGrassBladesCut;
+        GridManager.AllGrassBladesCut += OnAllGrassBladesCut;
     }
 
     private void UnsubscribeEvents()
     {
-        GridGenerator3D.AllGrassBladesCut -= OnAllGrassBladesCut;
+        GridManager.AllGrassBladesCut -= OnAllGrassBladesCut;
     }
     
     private void OnAllGrassBladesCut()
@@ -121,6 +121,11 @@ public class Grid3DPlayerController : MonoBehaviour
 
         var targetRotation = Quaternion.Slerp(rigidbody1.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.deltaTime * 20f);
         rigidbody1.MoveRotation(targetRotation);
+    }
+    
+    public void ChangeDirection(TapSideDetector.ScreenSide tappedSide)
+    {
+        direction = GetNewDirection(tappedSide, direction);
     }
 
     #endregion
@@ -201,10 +206,8 @@ public class Grid3DPlayerController : MonoBehaviour
 
         audioSource.pitch = audioPitch;
     }
-
-    #endregion
-
-    public Vector3 GetNewDirection(TapSideDetector.ScreenSide tappedSide, Vector3 currentDirection)
+    
+    private Vector3 GetNewDirection(TapSideDetector.ScreenSide tappedSide, Vector3 currentDirection)
     {
         Vector3 newDirection;
 
@@ -222,8 +225,5 @@ public class Grid3DPlayerController : MonoBehaviour
         return newDirection;
     }
 
-    public void ChangeDirection(TapSideDetector.ScreenSide tappedSide)
-    {
-        direction = GetNewDirection(tappedSide, direction);
-    }
+    #endregion
 }

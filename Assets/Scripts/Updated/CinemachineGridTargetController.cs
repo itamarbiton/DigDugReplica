@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.Networking;
+using Updated;
 
 [RequireComponent(typeof(CinemachineTargetGroup))]
 public class CinemachineGridTargetController : MonoBehaviour
@@ -28,15 +29,15 @@ public class CinemachineGridTargetController : MonoBehaviour
 
     private void SubscribeEvents()
     {
-        GridGenerator3D.GridDidLoad += OnGridLoad;
+        GridManager.GridDidLoad += OnGridLoad;
     }
 
     private void UnsubscribeEvents()
     {
-        GridGenerator3D.GridDidLoad -= OnGridLoad;
+        GridManager.GridDidLoad -= OnGridLoad;
     }
 
-    private void OnGridLoad(GridGenerator3D gridGenerator)
+    private void OnGridLoad(GridManager gridGenerator)
     {
         targetGroup.m_Targets = new CinemachineTargetGroup.Target[2];
         

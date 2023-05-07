@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Updated;
 
 public class WinScreenController : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class WinScreenController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
 
-        GridGenerator3D.AllGrassBladesCut += OnAllGrassBladesCut;
+        GridManager.AllGrassBladesCut += OnAllGrassBladesCut;
     }
 
     private void Update()
@@ -29,7 +30,7 @@ public class WinScreenController : MonoBehaviour
 
     private void OnDestroy()
     {
-        GridGenerator3D.AllGrassBladesCut -= OnAllGrassBladesCut;
+        GridManager.AllGrassBladesCut -= OnAllGrassBladesCut;
     }
 
     private void OnAllGrassBladesCut()

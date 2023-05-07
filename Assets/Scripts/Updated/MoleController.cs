@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Updated;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
@@ -93,12 +94,12 @@ public class MoleController : MonoBehaviour
 
     private void SubscribeEvents()
     {
-        GridGenerator3D.AllGrassBladesCut += OnAllGrassBladesCut;
+        GridManager.AllGrassBladesCut += OnAllGrassBladesCut;
     }
 
     private void UnsubscribeEvents()
     {
-        GridGenerator3D.AllGrassBladesCut -= OnAllGrassBladesCut;
+        GridManager.AllGrassBladesCut -= OnAllGrassBladesCut;
     }
 
     private void OnAllGrassBladesCut()

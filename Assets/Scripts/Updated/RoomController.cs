@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Updated;
 
 public class RoomController : MonoBehaviour
 {
-    [SerializeField] private GridGenerator3D gridGenerator;
+    [SerializeField] private GridManager gridGenerator;
     [SerializeField] private GameObject leftWallPrefab;
     [SerializeField] private GameObject topLeftCornerPrefab;
 
@@ -14,12 +15,6 @@ public class RoomController : MonoBehaviour
         CreateRoom(leftWallPrefab, topLeftCornerPrefab, gridGenerator.columns, gridGenerator.rows);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    
     public void CreateRoom(GameObject leftWallPrefab, GameObject topLeftCornerPrefab, float halfWidth, float halfHeight) {
         // Calculate half dimensions for positioning
         float width = halfWidth * 2f;

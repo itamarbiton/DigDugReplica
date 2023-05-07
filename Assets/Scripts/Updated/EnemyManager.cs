@@ -76,15 +76,15 @@ namespace Updated
 
         private void SubscribeEvents()
         {
-            GridGenerator3D.GridDidLoad += OnGridDidLoad;
+            GridManager.GridDidLoad += OnGridDidLoad;
         }
 
         private void UnsubscribeEvents()
         {
-            GridGenerator3D.GridDidLoad -= OnGridDidLoad;
+            GridManager.GridDidLoad -= OnGridDidLoad;
         }
 
-        private void OnGridDidLoad(GridGenerator3D gridGenerator)
+        private void OnGridDidLoad(GridManager gridGenerator)
         {
             InstantiateEnemies(gridGenerator.GridData);
         }
