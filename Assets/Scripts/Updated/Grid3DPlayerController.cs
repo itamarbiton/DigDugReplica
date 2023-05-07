@@ -136,6 +136,11 @@ public class Grid3DPlayerController : MonoBehaviour
         direction = GetNewDirection(tappedSide, direction);
     }
 
+    public void ChangeDirection(KeyCode keyCode)
+    {
+        direction = GetNewDirection(keyCode, direction);
+    }
+
     #endregion
     
     #region Collision Handling
@@ -213,6 +218,36 @@ public class Grid3DPlayerController : MonoBehaviour
         }
 
         audioSource.pitch = audioPitch;
+    }
+
+    private Vector3 GetNewDirection(KeyCode keyCode, Vector3 currentDirection)
+    {
+        Vector3 newDirection;
+        
+        switch (keyCode)
+        {
+            case KeyCode.LeftArrow:
+                newDirection = new Vector3(-1, 0, 0);
+                break;
+                
+            case KeyCode.RightArrow:
+                newDirection = new Vector3(1, 0, 0);
+                break;
+                
+            case KeyCode.UpArrow:
+                newDirection = new Vector3(0, 0, 1);
+                break;
+                
+            case KeyCode.DownArrow:
+                newDirection = new Vector3(0, 0, -1);
+                break;
+            
+            default:
+                newDirection = Vector3.right;
+                break;
+        }
+
+        return newDirection;
     }
     
     private Vector3 GetNewDirection(TapSideDetector.ScreenSide tappedSide, Vector3 currentDirection)

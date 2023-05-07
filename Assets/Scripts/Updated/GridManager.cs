@@ -35,9 +35,25 @@ namespace Updated
         public void InitializeGrid()
         {
             Random.InitState(seed);
-            
-            grid = new bool[gridWidth, gridHeight];
-            GridGameObjects = new GameObject[gridWidth, gridHeight];
+
+            if (LevelDataProvider.currentLevel != null)
+            {
+                LevelDataProvider.LevelData currentLevel = LevelDataProvider.currentLevel;
+                
+                gridWidth = currentLevel.width;
+                gridHeight = currentLevel.height;
+                
+                grid = new bool[currentLevel.width, currentLevel.height];
+                GridGameObjects = new GameObject[currentLevel.width, currentLevel.height];
+                
+                normalPrefabs = currentLevel.normalPrefabs;
+                specialPrefabs = currentLevel.specialPrefabs;
+            }
+            else
+            {
+                grid = new bool[gridWidth, gridHeight];
+                GridGameObjects = new GameObject[gridWidth, gridHeight];
+            }
             
             PlaceSpecialPrefabs();
             

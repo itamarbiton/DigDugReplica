@@ -37,6 +37,11 @@ namespace Updated
             player.ChangeDirection(tappedSide);
         }
 
+        public void ChangeDirectionOnArrow(KeyCode keyCode)
+        {
+            player.ChangeDirection(keyCode);
+        }
+
         #endregion
 
         #region Event Handling

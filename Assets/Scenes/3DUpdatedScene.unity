@@ -971,6 +971,7 @@ GameObject:
   - component: {fileID: 524489435}
   - component: {fileID: 524489436}
   - component: {fileID: 524489437}
+  - component: {fileID: 524489438}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -1057,6 +1058,74 @@ MonoBehaviour:
   gridHeight: 5
   gridCellSize: 2
   seed: 1010001
+--- !u!114 &524489438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 524489432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77ce036a680b4700b5e4d24f652177b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levels:
+  - width: 5
+    height: 3
+    specialPrefabs:
+    - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
+      count: 0
+      width: 2
+      height: 2
+    normalPrefabs:
+    - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
+    - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
+    enemyPercent: 0
+  - width: 6
+    height: 4
+    specialPrefabs:
+    - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
+      count: 0
+      width: 2
+      height: 2
+    normalPrefabs:
+    - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
+    - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
+    enemyPercent: 0.07
+  - width: 7
+    height: 4
+    specialPrefabs:
+    - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
+      count: 1
+      width: 2
+      height: 2
+    normalPrefabs:
+    - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
+    - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
+    enemyPercent: 0.07
+  - width: 9
+    height: 7
+    specialPrefabs:
+    - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
+      count: 1
+      width: 2
+      height: 2
+    normalPrefabs:
+    - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
+    - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
+    enemyPercent: 0.12
+  - width: 8
+    height: 5
+    specialPrefabs:
+    - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
+      count: 2
+      width: 2
+      height: 2
+    normalPrefabs:
+    - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
+    - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
+    enemyPercent: 0.1
 --- !u!1 &578810566
 GameObject:
   m_ObjectHideFlags: 0

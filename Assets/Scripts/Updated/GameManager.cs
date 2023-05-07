@@ -38,6 +38,17 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         if (!isGameRunning) return;
+
+        KeyCode current = KeyCode.None;
+        if (Input.GetKeyDown(KeyCode.RightArrow)) current = KeyCode.RightArrow;
+        else if (Input.GetKeyDown(KeyCode.LeftArrow)) current = KeyCode.LeftArrow;
+        else if (Input.GetKeyDown(KeyCode.UpArrow)) current = KeyCode.UpArrow;
+        else if (Input.GetKeyDown(KeyCode.DownArrow)) current = KeyCode.DownArrow;
+        if (current != KeyCode.None)
+        {
+            playerManager.ChangeDirectionOnArrow(current);
+        }
+        
         HandleMovement();
     }
 

@@ -50,6 +50,11 @@ namespace Updated
                 return;
             }
             
+            if (LevelDataProvider.currentLevel != null)
+            {
+                enemyPercent = LevelDataProvider.currentLevel.enemyPercent;
+            }
+            
             var targetGridData = Vector3Utils.RemoveBottomRow(gridData);
             List<int[]> enemyPositions = Vector3Utils.GetRandomIndices(targetGridData, enemyPercent);
 
