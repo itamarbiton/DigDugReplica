@@ -29,10 +29,12 @@ public class PrefabSpreader : MonoBehaviour
 
     public void SpreadPrefabs(float width, float height, GameObject prefab, int count)
     {
+        Transform parentTransform = transform;
+
         for (int i = 0; i < count; i++)
         {
             Vector3 position = positions[i];
-            Instantiate(prefab, position, Quaternion.identity);
+            Instantiate(prefab, position, Quaternion.identity, parentTransform);
         }
     }
 
