@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 8145602752824917188}
   - component: {fileID: 164611502513732948}
   - component: {fileID: 7850760568268198102}
+  - component: {fileID: 245033250685493433}
   m_Layer: 0
   m_Name: Fountain
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -83,6 +84,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &245033250685493433
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3549380288508436032}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.03053687, y: 0.030536864, z: 0.024480969}
+  m_Center: {x: 0, y: 5.435868e-18, z: 0.012240484}
 --- !u!1 &5330120654108999552
 GameObject:
   m_ObjectHideFlags: 0

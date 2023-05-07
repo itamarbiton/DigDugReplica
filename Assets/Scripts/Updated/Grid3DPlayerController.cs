@@ -147,7 +147,7 @@ public class Grid3DPlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.GetComponentInParent<MoleController>() != null)
+        if (other.gameObject.GetComponentInParent<MoleController>() != null || other.gameObject.CompareTag("Obstacle"))
         {
             HandleMoleCollision();
         }
