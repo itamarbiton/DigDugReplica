@@ -12,13 +12,15 @@ public class Grid3DPlayerController : MonoBehaviour
     public bool IsAlive { get; private set; } = true;
     public Vector3[,] GridData;
 
-    [FormerlySerializedAs("smokeParticlesystem")] [SerializeField] private ParticleSystem smokeParticleSystem;
+    [FormerlySerializedAs("smokeParticlesystem")] [SerializeField]
+    private ParticleSystem smokeParticleSystem;
+
     [SerializeField] private AudioClip grassPopAudioClip;
     [SerializeField] private AudioClip explosionAudioClip;
     [SerializeField] private AnimationCurve curve;
     [SerializeField] private GameObject explosionPrefab;
-    
-    private Vector3 direction = Vector3.right;
+
+    public Vector3 Direction { get; private set; } = Vector3.right;
     private Vector2 gridPosition = new Vector2(0, 0);
 
     private float rotationDuration = .12f;
@@ -49,7 +51,7 @@ public class Grid3DPlayerController : MonoBehaviour
     {
         UnsubscribeEvents();
     }
-    
+
     private void Start()
     {
         rigidbody1 = GetComponent<Rigidbody>();
@@ -60,8 +62,6 @@ public class Grid3DPlayerController : MonoBehaviour
     {
         HandleSmoke();
         HandlePitch();
-        
-        Debug.DrawRay(transform.position, direction.normalized * 10, Color.red);
     }
 
     #region Event Handling
@@ -75,7 +75,7 @@ public class Grid3DPlayerController : MonoBehaviour
     {
         WinConditionController.PlayerDidWin -= OnPlayerDidWin;
     }
-    
+
     private void OnPlayerDidWin()
     {
         didWin = true;
@@ -104,7 +104,6 @@ public class Grid3DPlayerController : MonoBehaviour
                 IsWalking = false;
             }
         }
-        
     }
 
     public void HandleMovement()
@@ -112,8 +111,8 @@ public class Grid3DPlayerController : MonoBehaviour
         if (!IsAlive || GridData == null || GridData.Length == 0 || IsWalking) return;
 
         Vector2 targetGridPosition = new Vector2(
-            gridPosition.x + direction.x,
-            gridPosition.y + direction.z);
+            gridPosition.x + Direction.x,
+            gridPosition.y + Direction.z);
 
         if (IsTargetGridPositionOutOfBounds(targetGridPosition)) return;
 
@@ -122,27 +121,37 @@ public class Grid3DPlayerController : MonoBehaviour
         walkTimer = 0f;
         IsWalking = true;
     }
-    
+
     public void HandleRotation()
     {
         if (!IsAlive) return;
 
-        var targetRotation = Quaternion.Slerp(rigidbody1.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.deltaTime * 20f);
+        var targetRotation = Quaternion.Slerp(
+            rigidbody1.rotation,
+            Quaternion.LookRotation(Direction, Vector3.up),
+            Time.deltaTime * 20f
+        );
+        
         rigidbody1.MoveRotation(targetRotation);
     }
-    
+
     public void ChangeDirection(TapSideDetector.ScreenSide tappedSide)
     {
-        direction = GetNewDirection(tappedSide, direction);
+        Direction = GetNewDirection(tappedSide, Direction);
     }
 
     public void ChangeDirection(KeyCode keyCode)
     {
-        direction = GetNewDirection(keyCode, direction);
+        Direction = GetNewDirection(keyCode, Direction);
+    }
+
+    public void ChangeDirection(Vector3 newDirection)
+    {
+        Direction = newDirection;
     }
 
     #endregion
-    
+
     #region Collision Handling
 
     private void OnCollisionEnter(Collision other)
@@ -160,7 +169,7 @@ public class Grid3DPlayerController : MonoBehaviour
     private void HandleMoleCollision()
     {
         if (didWin) return;
-        
+
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         CinemachineShake.Instance.ShakeCamera(5f, 1f);
 
@@ -222,34 +231,30 @@ public class Grid3DPlayerController : MonoBehaviour
 
     private Vector3 GetNewDirection(KeyCode keyCode, Vector3 currentDirection)
     {
-        Vector3 newDirection;
-        
+        Vector3 newDirection = Direction;
+
         switch (keyCode)
         {
             case KeyCode.LeftArrow:
                 newDirection = new Vector3(-1, 0, 0);
                 break;
-                
+
             case KeyCode.RightArrow:
                 newDirection = new Vector3(1, 0, 0);
                 break;
-                
+
             case KeyCode.UpArrow:
                 newDirection = new Vector3(0, 0, 1);
                 break;
-                
+
             case KeyCode.DownArrow:
                 newDirection = new Vector3(0, 0, -1);
-                break;
-            
-            default:
-                newDirection = Vector3.right;
                 break;
         }
 
         return newDirection;
     }
-    
+
     private Vector3 GetNewDirection(TapSideDetector.ScreenSide tappedSide, Vector3 currentDirection)
     {
         Vector3 newDirection;

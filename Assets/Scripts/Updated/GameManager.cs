@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using Updated;
-using Updated.Utilities;
-using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,10 +27,10 @@ public class GameManager : MonoBehaviour
         gridManager = GetComponent<GridManager>();
         enemyManager = GetComponent<EnemyManager>();
         playerManager = GetComponent<PlayerManager>();
-        
+
         gridManager.SetConfiguration(LevelDataProvider.CurrentLevel.gridConfig);
         enemyManager.SetEnemyPercent(LevelDataProvider.CurrentLevel.enemyPercent);
-        
+
         gridManager.InitializeGrid();
     }
 
@@ -48,7 +44,7 @@ public class GameManager : MonoBehaviour
     private void FixedUpdate()
     {
         if (!isGameRunning) return;
-        HandlePhysics();        
+        HandlePhysics();
     }
 
     #region Game Handling
@@ -59,7 +55,9 @@ public class GameManager : MonoBehaviour
         {
             HandlePlayerKeyboardNavigation();
             
-            playerManager.HandleMovement();    
+            HandlePlayerGamepadNavigation();
+
+            playerManager.HandleMovement();
         }
 
         if (enemyManager != null)
@@ -89,6 +87,33 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void HandlePlayerGamepadNavigation()
+    {
+        if (!isGameRunning && TouchJoystick.IsTouching && TouchJoystick.CurrentDirection != TouchJoystick.Direction.None) return;
+
+        if (playerManager != null)
+        {
+            var keyCode = KeyCode.None;
+            switch (TouchJoystick.CurrentDirection)
+            {
+                case TouchJoystick.Direction.Up:
+                    keyCode = KeyCode.UpArrow;
+                    break;
+                case TouchJoystick.Direction.Down:
+                    keyCode = KeyCode.DownArrow;
+                    break;
+                case TouchJoystick.Direction.Left:
+                    keyCode = KeyCode.LeftArrow;
+                    break;
+                case TouchJoystick.Direction.Right:
+                    keyCode = KeyCode.RightArrow;
+                    break;
+            }
+
+            playerManager.ChangeDirectionOnArrow(keyCode);
+        }
+    }
+
     #endregion
 
     #region Event Handling
@@ -97,7 +122,6 @@ public class GameManager : MonoBehaviour
     {
         InstructionsController.InstructionsFinished += OnFinishedInstructions;
         TapSideDetector.SideTapped += OnSideTapped;
-        
     }
 
     private void UnsubscribeEvents()
@@ -122,7 +146,7 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
-    
+
     #region Private Implementation Details
 
     private void UpdateConfigurations()

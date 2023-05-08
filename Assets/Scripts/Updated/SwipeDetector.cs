@@ -10,7 +10,7 @@ public class SwipeDetector : MonoBehaviour
         Left,
         Right
     }
-    
+
     public static SwipeDetector Instance { get; private set; }
 
     [SerializeField] private float minSwipeDistance = 50f;
@@ -19,7 +19,7 @@ public class SwipeDetector : MonoBehaviour
     private Vector2 startTouchPosition;
     private float startTime;
     private SwipeDirection lastSwipeDirection = SwipeDirection.None;
-    
+
     private void Awake()
     {
         Instance = this;
