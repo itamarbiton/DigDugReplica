@@ -141,7 +141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &23754117
 RectTransform:
   m_ObjectHideFlags: 0
@@ -664,7 +664,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 229692856}
-  m_LocalRotation: {x: 0.45758158, y: -0.000000028475307, z: 0.000000014653901, w: 0.88916767}
+  m_LocalRotation: {x: 0.45758155, y: 0.000000010422694, z: -0.000000005363704, w: 0.88916767}
   m_LocalPosition: {x: -9, y: 14, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -886,7 +886,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &390273430
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1126,16 +1126,17 @@ MonoBehaviour:
   config:
     normalPrefabs:
     - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
+    - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
     specialPrefabs:
-    - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
-      count: 1
-      width: 2
-      height: 2
-    gridWidth: 12
-    gridHeight: 9
+    - prefab: {fileID: 2320923207034585365, guid: bbc5645b2514742099a3e77c8406e26d, type: 3}
+      count: 4
+      width: 1
+      height: 1
+    gridWidth: 9
+    gridHeight: 6
     gridCellSize: 2
-    seed: 1114110
-    targetGroupRadius: 0
+    seed: 1114322
+    targetGroupRadius: 1.5
 --- !u!114 &524489438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1173,12 +1174,16 @@ MonoBehaviour:
         count: 0
         width: 2
         height: 2
-      gridWidth: 5
-      gridHeight: 5
+      - prefab: {fileID: 2320923207034585365, guid: bbc5645b2514742099a3e77c8406e26d, type: 3}
+        count: 0
+        width: 1
+        height: 1
+      gridWidth: 6
+      gridHeight: 4
       gridCellSize: 2
       seed: 0
       targetGroupRadius: 2
-    enemyPercent: 0
+    enemyPercent: 0.04
   - gridConfig:
       normalPrefabs:
       - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
@@ -1188,12 +1193,12 @@ MonoBehaviour:
         count: 1
         width: 2
         height: 2
-      gridWidth: 6
-      gridHeight: 6
+      gridWidth: 7
+      gridHeight: 4
       gridCellSize: 2
-      seed: 2345678
+      seed: 2346192
       targetGroupRadius: 1.5
-    enemyPercent: 0
+    enemyPercent: 0.07
   - gridConfig:
       normalPrefabs:
       - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
@@ -1204,41 +1209,26 @@ MonoBehaviour:
         width: 2
         height: 2
       gridWidth: 7
-      gridHeight: 7
+      gridHeight: 5
       gridCellSize: 2
-      seed: 12121255
+      seed: 12122173
       targetGroupRadius: 1.5
-    enemyPercent: 0
+    enemyPercent: 0.07
   - gridConfig:
       normalPrefabs:
       - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
       - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
       specialPrefabs:
-      - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
-        count: 3
-        width: 2
-        height: 2
-      gridWidth: 8
-      gridHeight: 7
-      gridCellSize: 2
-      seed: -1023456
-      targetGroupRadius: 1.5
-    enemyPercent: 0
-  - gridConfig:
-      normalPrefabs:
-      - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
-      - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
-      specialPrefabs:
-      - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
+      - prefab: {fileID: 2320923207034585365, guid: bbc5645b2514742099a3e77c8406e26d, type: 3}
         count: 2
-        width: 2
-        height: 2
-      gridWidth: 9
-      gridHeight: 9
+        width: 1
+        height: 1
+      gridWidth: 7
+      gridHeight: 5
       gridCellSize: 2
-      seed: -444444
+      seed: 9067
       targetGroupRadius: 1.5
-    enemyPercent: 0
+    enemyPercent: 0.08
   - gridConfig:
       normalPrefabs:
       - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
@@ -1248,12 +1238,31 @@ MonoBehaviour:
         count: 1
         width: 2
         height: 2
-      gridWidth: 12
-      gridHeight: 9
+      - prefab: {fileID: 2320923207034585365, guid: bbc5645b2514742099a3e77c8406e26d, type: 3}
+        count: 2
+        width: 1
+        height: 1
+      gridWidth: 9
+      gridHeight: 5
       gridCellSize: 2
-      seed: 1114110
+      seed: 10829
       targetGroupRadius: 1.5
-    enemyPercent: 0
+    enemyPercent: 0.08
+  - gridConfig:
+      normalPrefabs:
+      - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
+      - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
+      specialPrefabs:
+      - prefab: {fileID: 2320923207034585365, guid: bbc5645b2514742099a3e77c8406e26d, type: 3}
+        count: 4
+        width: 1
+        height: 1
+      gridWidth: 9
+      gridHeight: 6
+      gridCellSize: 2
+      seed: 1114322
+      targetGroupRadius: 1.5
+    enemyPercent: 0.1
 --- !u!1 &549272788
 GameObject:
   m_ObjectHideFlags: 0
@@ -2934,7 +2943,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1461347073}
-  m_LocalRotation: {x: 0.45758158, y: -0.000000028475307, z: 0.000000014653901, w: 0.88916767}
+  m_LocalRotation: {x: 0.45758155, y: 0.000000010422694, z: -0.000000005363704, w: 0.88916767}
   m_LocalPosition: {x: -9, y: 14, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

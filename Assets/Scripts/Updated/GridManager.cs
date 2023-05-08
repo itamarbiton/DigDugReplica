@@ -46,10 +46,10 @@ namespace Updated
             bool[,] gizmoGrid = new bool[config.gridWidth, config.gridHeight];
             GameObject[,] gizmoGridGameObjects = new GameObject[config.gridWidth, config.gridHeight];
 
-            PlaceSpecialPrefabs(gizmoGrid, new GizmoGridInstanceProvider(Color.blue, config.gridCellSize));
+            PlaceSpecialPrefabs(gizmoGrid, new GizmoGridInstanceProvider(Color.red, config.gridCellSize, .5f));
 
             FillRemainingGridWithNormalPrefab(gizmoGrid, gizmoGridGameObjects,
-                new GizmoGridInstanceProvider(Color.green, config.gridCellSize));
+                new GizmoGridInstanceProvider(Color.green, config.gridCellSize, .1f));
         }
 
         #endregion
@@ -231,16 +231,18 @@ namespace Updated
     public class GizmoGridInstanceProvider : IGridInstanceProvider
     {
         private float resolution;
+        private float height = .1f;
 
-        public GizmoGridInstanceProvider(Color gizmoColor, float resolution)
+        public GizmoGridInstanceProvider(Color gizmoColor, float resolution, float height)
         {
             Gizmos.color = gizmoColor;
             this.resolution = resolution;
+            this.height = height;
         }
 
         public GameObject Instantiate(GameObject gameObject, Vector3 position, Quaternion rotation, Transform parent)
         {
-            Gizmos.DrawWireCube(position, new Vector3(resolution, .1f, resolution));
+            Gizmos.DrawWireCube(position, new Vector3(resolution, height, resolution));
 
             return null;
         }

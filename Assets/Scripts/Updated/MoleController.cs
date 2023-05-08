@@ -41,11 +41,13 @@ public class MoleController : MonoBehaviour
 
         if (IsWalking) return;
 
+        Random.InitState(DateTime.UtcNow.Millisecond);
+
         direction = availableDirections[Random.Range(0, availableDirections.Count)];
 
         Vector2 targetGridPosition = new Vector2(
-            GridPosition.x + direction.z, 
-            GridPosition.y + direction.x);
+            GridPosition.x + direction.x, 
+            GridPosition.y + direction.z);
         
         if (targetGridPosition.x >= GridData.GetLength(0) || targetGridPosition.x < 0)
             return;

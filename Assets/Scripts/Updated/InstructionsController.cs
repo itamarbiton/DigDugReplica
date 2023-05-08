@@ -55,12 +55,7 @@ public class InstructionsController : MonoBehaviour
                 break;
             
             case InstructionsState.Visible:
-                if (Input.anyKeyDown)
-                {
-                    animator.SetTrigger("Controls");
-                    state = InstructionsState.Controls;
-                }
-                
+                if (Input.anyKeyDown) StartCoroutine(HideCoroutine());
                 break;
             
             case InstructionsState.Controls:
