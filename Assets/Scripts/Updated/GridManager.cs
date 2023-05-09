@@ -39,7 +39,7 @@ namespace Updated
 
         #region Gizmos
 
-        private void OnDrawGizmos()
+        private void OnDrawGizmosSelected()
         {
             Random.InitState(config.seed);
 

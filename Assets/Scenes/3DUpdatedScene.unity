@@ -928,7 +928,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 455e7aab82f234b64a7dcc4bc85fcc49, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1155,8 +1155,12 @@ MonoBehaviour:
       - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
       - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
       specialPrefabs:
-      - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
-        count: 0
+      - prefab: {fileID: 2320923207034585365, guid: bbc5645b2514742099a3e77c8406e26d, type: 3}
+        count: 1
+        width: 1
+        height: 1
+      - prefab: {fileID: 6671791985953876189, guid: ddde5fca5f862435fa0850ffafac207d, type: 3}
+        count: 1
         width: 2
         height: 2
       gridWidth: 4
@@ -1189,7 +1193,7 @@ MonoBehaviour:
       - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
       - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
       specialPrefabs:
-      - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
+      - prefab: {fileID: 6671791985953876189, guid: ddde5fca5f862435fa0850ffafac207d, type: 3}
         count: 1
         width: 2
         height: 2
@@ -1204,7 +1208,7 @@ MonoBehaviour:
       - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
       - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
       specialPrefabs:
-      - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
+      - prefab: {fileID: 6671791985953876189, guid: ddde5fca5f862435fa0850ffafac207d, type: 3}
         count: 2
         width: 2
         height: 2
@@ -1234,7 +1238,7 @@ MonoBehaviour:
       - {fileID: 5409639230562725235, guid: bb3fd0b80feac46fca8f280f2263ff8b, type: 3}
       - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
       specialPrefabs:
-      - prefab: {fileID: 8453668447067231175, guid: f81c1ff79aa4c4e83a753488156bccc5, type: 3}
+      - prefab: {fileID: 6671791985953876189, guid: ddde5fca5f862435fa0850ffafac207d, type: 3}
         count: 1
         width: 2
         height: 2
@@ -8248,7 +8252,7 @@ RectTransform:
   m_GameObject: {fileID: 2140204291}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.46, y: 0.46, z: 0.46}
+  m_LocalScale: {x: 0.73, y: 0.73, z: 0.73}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 390273430}
@@ -8287,14 +8291,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: a0b3c94e4c81941c88427adc45f75d92, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
