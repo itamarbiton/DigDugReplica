@@ -1156,11 +1156,11 @@ MonoBehaviour:
       - {fileID: 2744144117369893961, guid: 22270861d0efd4b97b6efe478e7c9c77, type: 3}
       specialPrefabs:
       - prefab: {fileID: 2320923207034585365, guid: bbc5645b2514742099a3e77c8406e26d, type: 3}
-        count: 1
+        count: 0
         width: 1
         height: 1
       - prefab: {fileID: 6671791985953876189, guid: ddde5fca5f862435fa0850ffafac207d, type: 3}
-        count: 1
+        count: 0
         width: 2
         height: 2
       gridWidth: 4
@@ -1186,7 +1186,7 @@ MonoBehaviour:
       gridHeight: 4
       gridCellSize: 2
       seed: 0
-      targetGroupRadius: 2
+      targetGroupRadius: 3
     enemyPercent: 0.04
   - gridConfig:
       normalPrefabs:
@@ -1201,7 +1201,7 @@ MonoBehaviour:
       gridHeight: 4
       gridCellSize: 2
       seed: 2346192
-      targetGroupRadius: 1.5
+      targetGroupRadius: 2.3
     enemyPercent: 0.07
   - gridConfig:
       normalPrefabs:
@@ -1216,7 +1216,7 @@ MonoBehaviour:
       gridHeight: 5
       gridCellSize: 2
       seed: 12122173
-      targetGroupRadius: 1.5
+      targetGroupRadius: 2.3
     enemyPercent: 0.07
   - gridConfig:
       normalPrefabs:
@@ -1231,7 +1231,7 @@ MonoBehaviour:
       gridHeight: 5
       gridCellSize: 2
       seed: 9067
-      targetGroupRadius: 1.5
+      targetGroupRadius: 2.3
     enemyPercent: 0.08
   - gridConfig:
       normalPrefabs:
@@ -1250,7 +1250,7 @@ MonoBehaviour:
       gridHeight: 5
       gridCellSize: 2
       seed: 10829
-      targetGroupRadius: 1.5
+      targetGroupRadius: 2.3
     enemyPercent: 0.08
   - gridConfig:
       normalPrefabs:
@@ -1265,7 +1265,7 @@ MonoBehaviour:
       gridHeight: 6
       gridCellSize: 2
       seed: 1114322
-      targetGroupRadius: 1.5
+      targetGroupRadius: 2.3
     enemyPercent: 0.1
 --- !u!1 &549272788
 GameObject:
